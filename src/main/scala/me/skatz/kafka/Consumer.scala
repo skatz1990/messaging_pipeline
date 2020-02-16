@@ -9,18 +9,17 @@ object Consumer {
   def main(args: Array[String]): Unit = {
     println("Consumer started")
     val props = configure()
-    consumeFromKafka(props, Config().getString("kafka_app.topic"))
+    consumeFromKafka(props, "kafka-example")
     println("Consumer completed")
   }
 
   def configure(): Properties = {
     val props = new Properties()
-    props.put("bootstrap.servers", Config().getString("kafka_app.bootstrap.servers"))
     props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
     props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
-    props.put("auto.offset.reset", Config().getString("kafka_app.auto.offset.reset"))
-    props.put("group.id", Config().getString("kafka_app.group.id"))
-
+    props.put("bootstrap.servers", sys.env("bootstrap_servers"))
+    props.put("auto.offset.reset", sys.env("auto_offset_reset"))
+    props.put("group.id", sys.env("group_id"))
     props
   }
 
@@ -31,8 +30,10 @@ object Consumer {
     while (true) {
       val record = consumer.poll(1000)
       val i = record.iterator
-      while (i.hasNext)
-        print(i.next.value() + "\r\n")
+      while (i.hasNext) {
+        val next = i.next.value()
+        println(s"CONSUMED: $next\r\n")
+      }
     }
   }
 }

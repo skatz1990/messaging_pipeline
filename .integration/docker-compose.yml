@@ -1,7 +1,8 @@
 version: '3.5'
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper
     container_name: zookeeper
     ports:
       - '2181:2181'
@@ -9,16 +10,46 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
   kafka:
-    image: confluentinc/cp-kafka
+    image: confluentinc/cp-kafka:latest
+    hostname: kafka
     container_name: kafka
     links:
       - zookeeper
     ports:
       - '9092:9092'
+      - '29092:29092'
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://localhost:9092'
+      KAFKA_ADVERTISED_HOSTNAME: kafka
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_INTERNAL://kafka:29092,LISTENER_EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_INTERNAL:PLAINTEXT,LISTENER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_INTERNAL
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
 
+  kafka-consumer:
+    image: kafka-consumer
+    container_name: kafka-consumer
+    depends_on:
+      - kafka
+      - zookeeper
+    links:
+      - kafka
+      - zookeeper
+    environment:
+      bootstrap_servers: 'kafka:29092'
+      auto_offset_reset: 'latest'
+      group_id: 'consumer-group'
+  kafka-producer:
+    image: kafka-producer
+    container_name: kafka-producer
+    depends_on:
+      - kafka
+      - zookeeper
+    links:
+      - kafka
+      - zookeeper
+    environment:
+      bootstrap_servers: 'kafka:29092'
