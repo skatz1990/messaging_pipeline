@@ -17,9 +17,9 @@ object Consumer {
     val props = new Properties()
     props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
     props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
-    props.put("bootstrap.servers", sys.env("bootstrap_servers"))
-    props.put("auto.offset.reset", sys.env("auto_offset_reset"))
-    props.put("group.id", sys.env("group_id"))
+    props.put("bootstrap.servers", sys.env.getOrElse("bootstrap_servers", "localhost:9092"))
+    props.put("auto.offset.reset", sys.env.getOrElse("auto_offset_reset", "latest"))
+    props.put("group.id", sys.env.getOrElse("group_id", "consumer-group"))
     props
   }
 
