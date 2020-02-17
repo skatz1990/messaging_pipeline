@@ -10,7 +10,9 @@ object HttpClient {
   }
 
   def post(url: String, postData: String): String = {
-    val result = Http(url).postData(postData)
+    val result = Http(url)
+      .method("POST")
+      .postData(postData)
       .header("Content-Type", "application/json")
       .header("Charset", "UTF-8")
       .option(HttpOptions.readTimeout(10000)).asString
