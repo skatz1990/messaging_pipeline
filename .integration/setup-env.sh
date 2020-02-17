@@ -22,11 +22,12 @@ runCommand() {
 echo "Running docker compose up. Docker version $DOCKER_VERSION. Compose version $COMPOSE_VERSION. "
 
 echo "If it's up, we're bringing it down..."
-docker-compose down
+docker-compose down -v # Remove -v for persistent volume
 echo "Bringing it up!"
+docker-compose up -d elasticsearch # Bringing it up first because it takes a moment to come up
 docker-compose up -d kafka
 
-sleep 5
+sleep 20
 # Create the topic
 runCommand \
   "Creating kafka topic" \

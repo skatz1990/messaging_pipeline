@@ -54,8 +54,8 @@ object Consumer {
   }
 
   def postBatch(postData: String): Unit = {
-    var url: String = sys.env.getOrElse("elasticsearch_url", "localhost:9200")
-    url += s"/samples/_doc/1"
+    var url: String = "http://" + sys.env.getOrElse("elasticsearch_url", "localhost:9200")
+    url += s"/samples/_doc"
     val result = HttpClient.post(url, postData)
     println(result)
   }
