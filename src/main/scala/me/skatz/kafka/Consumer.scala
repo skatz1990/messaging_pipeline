@@ -11,7 +11,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer
 import scala.collection.mutable
 
 object Consumer {
-  val batchSize: Int = 1
+  val batchSize: Int = 10
   val messageQueue: mutable.Queue[Message] = mutable.Queue[Message]()
 
   def main(args: Array[String]): Unit = {
@@ -55,7 +55,7 @@ object Consumer {
 
   def postBatch(postData: String): Unit = {
     var url: String = "http://" + sys.env.getOrElse("elasticsearch_url", "localhost:9200")
-    url += s"/samples/_doc"
+    url += s"/kafka_data/_doc/_bulk"
     val result = HttpClient.post(url, postData)
     println(result)
   }
@@ -64,7 +64,8 @@ object Consumer {
     var jsonString = ""
     while (this.messageQueue.nonEmpty) {
       val currentMessage = this.messageQueue.dequeue()
-      jsonString += JsonHelper.parseObject(currentMessage)
+      jsonString += "{ \"index\":{} }\r\n"
+      jsonString += s"${JsonHelper.parseObject(currentMessage)}\r\n"
     }
 
     jsonString
