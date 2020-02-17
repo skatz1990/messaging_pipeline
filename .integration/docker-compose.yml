@@ -28,19 +28,23 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_INTERNAL:PLAINTEXT,LISTENER_EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_INTERNAL
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      topic_name: "our_kafka_topic"
   kafka-consumer:
     image: kafka-consumer
     container_name: kafka-consumer
     depends_on:
       - kafka
       - zookeeper
+      - elasticsearch
     links:
       - kafka
       - zookeeper
     environment:
       bootstrap_servers: 'kafka:29092'
+      elasticsearch_url: 'elasticsearch:9200'
       auto_offset_reset: 'latest'
       group_id: 'consumer-group'
+      topic_name: "our_kafka_topic"
   kafka-producer:
     image: kafka-producer
     container_name: kafka-producer

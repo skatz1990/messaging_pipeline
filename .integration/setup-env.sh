@@ -30,7 +30,7 @@ sleep 5
 # Create the topic
 runCommand \
   "Creating kafka topic" \
-  "docker-compose exec kafka kafka-topics --create --topic kafka-example --partitions 2 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181"
+  "docker-compose exec kafka kafka-topics --create --topic our_kafka_topic --partitions 2 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181"
 
 docker-compose up -d
 

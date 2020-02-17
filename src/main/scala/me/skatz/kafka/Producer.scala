@@ -3,6 +3,7 @@ package me.skatz.kafka
 import java.time.LocalDateTime
 import java.util.Properties
 
+import me.skatz.models.Message
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 
 object Producer {
@@ -10,7 +11,7 @@ object Producer {
   def main(args: Array[String]): Unit = {
     println("Producer started")
     val props = configure()
-    produceToKafka(props, "kafka-example")
+    produceToKafka(props,  sys.env.getOrElse("topic_name", "our_kafka_topic"))
     println("Producer completed")
   }
 
@@ -26,10 +27,11 @@ object Producer {
     val producer = new KafkaProducer[Nothing, String](props)
 
     while (true) {
-      val message = LocalDateTime.now().toString
-      val record = new ProducerRecord(topic, message)
+      val message = new Message(LocalDateTime.now().toString)
+      val record = new ProducerRecord(topic, message.getData)
       producer.send(record)
-      println(s"SENT: $record\r\n")
+      println(s"SENT: ${message.getData}")
+      Thread.sleep(1000)
     }
 
     producer.close()
