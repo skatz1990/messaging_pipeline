@@ -5,6 +5,7 @@ metadata:
   labels:
     app: elasticsearch
 spec:
+  type: LoadBalancer
   ports:
     - name: elasticsearch
       port: 9200

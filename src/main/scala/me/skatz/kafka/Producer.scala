@@ -2,6 +2,7 @@ package me.skatz.kafka
 
 import java.time.LocalDateTime
 import java.util.Properties
+
 import me.skatz.models.Message
 import me.skatz.utils.Configuration
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
@@ -27,7 +28,7 @@ object Producer {
     val producer = new KafkaProducer[Nothing, String](props)
 
     while (true) {
-      val message = new Message(LocalDateTime.now().toString)
+      val message = new Message(s"New message: ${LocalDateTime.now().toString}")
       val record = new ProducerRecord(topic, message.getData)
       producer.send(record)
       println(s"SENT: ${message.getData}")

@@ -5,6 +5,7 @@ metadata:
   labels:
     app: kafka-inf
 spec:
+  type: LoadBalancer
   ports:
     - name: kafka
       port: 9092
