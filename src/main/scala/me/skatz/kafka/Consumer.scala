@@ -2,10 +2,9 @@ package me.skatz.kafka
 
 import java.util
 import java.util.Properties
-
 import me.skatz.http.HttpClient
 import me.skatz.models.Message
-import me.skatz.utils.JsonHelper
+import me.skatz.utils.{Configuration, JsonHelper}
 import org.apache.kafka.clients.consumer.KafkaConsumer
 
 import scala.collection.mutable
@@ -17,7 +16,7 @@ object Consumer {
   def main(args: Array[String]): Unit = {
     println("Consumer started")
     val props = configure()
-    consumeFromKafka(props, sys.env.getOrElse("topic_name", "our_kafka_topic"))
+    consumeFromKafka(props, Configuration.topicName)
     println("Consumer completed")
   }
 
@@ -25,9 +24,9 @@ object Consumer {
     val props = new Properties()
     props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
     props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
-    props.put("bootstrap.servers", sys.env.getOrElse("bootstrap_servers", "localhost:9092"))
-    props.put("auto.offset.reset", sys.env.getOrElse("auto_offset_reset", "latest"))
-    props.put("group.id", sys.env.getOrElse("group_id", "consumer-group"))
+    props.put("bootstrap.servers", Configuration.bootstrapServer)
+    props.put("auto.offset.reset", Configuration.autoOffsetReset)
+    props.put("group.id", Configuration.groupId)
     props
   }
 
@@ -54,8 +53,7 @@ object Consumer {
   }
 
   def postBatch(postData: String): Unit = {
-    var url: String = "http://" + sys.env.getOrElse("elasticsearch_url", "localhost:9200")
-    url += s"/kafka_data/_doc/_bulk"
+    val url: String = "http://" + Configuration.esUrl + Configuration.esBulkEndpoint
     val result = HttpClient.post(url, postData)
     println(result)
   }

@@ -2,8 +2,8 @@ package me.skatz.kafka
 
 import java.time.LocalDateTime
 import java.util.Properties
-
 import me.skatz.models.Message
+import me.skatz.utils.Configuration
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 
 object Producer {
@@ -11,13 +11,13 @@ object Producer {
   def main(args: Array[String]): Unit = {
     println("Producer started")
     val props = configure()
-    produceToKafka(props,  sys.env.getOrElse("topic_name", "our_kafka_topic"))
+    produceToKafka(props,  Configuration.topicName)
     println("Producer completed")
   }
 
   def configure(): Properties = {
     val props = new Properties()
-    props.put("bootstrap.servers", sys.env.getOrElse("bootstrap_servers", "localhost:9092"))
+    props.put("bootstrap.servers", Configuration.bootstrapServer)
     props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
     props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
     props
