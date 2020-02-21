@@ -17,25 +17,20 @@ spec:
       containers:
         - name: kafka-inf
           image: confluentinc/cp-kafka
-#          ports:
-#            - containerPort: 9092
           env:
             - name: KAFKA_ZOOKEEPER_CONNECT
               value: "zookeeper:2181"
-#            - name: KAFKA_ADVERTISED_PORT
-#              value: "30718"
             - name: KAFKA_BROKER_ID
               value: "1"
             - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
               value: "1"
             - name: KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS
               value: "0"
-#            - name: topic_name
-#              value: "our_kafka_topic"
             - name: KAFKA_ADVERTISED_LISTENERS
               value: "PLAINTEXT://kafka-inf:9092"
             - name: KAFKA_LISTENERS
               value: "PLAINTEXT://:9092"
             - name: KAFKA_CREATE_TOPICS
               value: "our_kafka_topic:1:1"
-              # value: "our_kafka_topic:1:1,Topic2:1:1:compact"
+            - name: TOPIC_NAME
+              value: "our_kafka_topic"
