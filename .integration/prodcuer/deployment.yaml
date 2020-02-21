@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-producer
+  labels:
+    app: kafka-producer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-producer
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: kafka-producer
+    spec:
+      containers:
+        - image: kafka-producer
+          name: kafka-producer
+          env:
+            - name: bootstrap_servers
+              value: 'kafka:29092'
