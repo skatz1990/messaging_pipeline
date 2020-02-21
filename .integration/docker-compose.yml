@@ -42,6 +42,7 @@ services:
     environment:
       bootstrap_servers: 'kafka:29092'
       elasticsearch_url: 'elasticsearch:9200'
+      elasticsearch_bulk_endpoint: '/kafka_data/_doc/_bulk'
       auto_offset_reset: 'latest'
       group_id: 'consumer-group'
       topic_name: "our_kafka_topic"
