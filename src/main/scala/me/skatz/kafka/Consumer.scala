@@ -2,6 +2,9 @@ package me.skatz.kafka
 
 import java.util
 import java.util.Properties
+
+import akka.actor.typed.scaladsl.{AbstractBehavior, ActorContext, Behaviors}
+import akka.actor.typed.{Behavior, PostStop, Signal}
 import me.skatz.http.HttpClient
 import me.skatz.models.Message
 import me.skatz.utils.{Configuration, JsonHelper}
@@ -10,14 +13,29 @@ import org.apache.kafka.clients.consumer.KafkaConsumer
 import scala.collection.mutable
 
 object Consumer {
+  def apply(): Behavior[String] =
+    Behaviors.setup(context => new Consumer(context))
+}
+
+class Consumer(context: ActorContext[String]) extends AbstractBehavior[String](context) {
   val batchSize: Int = 10
   val messageQueue: mutable.Queue[Message] = mutable.Queue[Message]()
 
-  def main(args: Array[String]): Unit = {
-    println("Consumer started")
-    val props = configure()
-    consumeFromKafka(props, Configuration.topicName)
-    println("Consumer completed")
+  override def onMessage(msg: String): Behavior[String] =
+    msg match {
+      case "consume" =>
+        context.log.info("Consumer started")
+        val props = configure()
+        consumeFromKafka(props, Configuration.topicName)
+        context.log.info("Consumer completed")
+        this
+      case "stop" => Behaviors.stopped
+    }
+
+  override def onSignal: PartialFunction[Signal, Behavior[String]] = {
+    case PostStop =>
+      context.log.info("Consumer stopped")
+      this
   }
 
   def configure(): Properties = {
@@ -42,7 +60,7 @@ object Consumer {
 
         val message = new Message(next)
         this.messageQueue.enqueue(message)
-        println(s"Consumed message: ${message.getData}")
+        context.log.info(s"Consumed message: ${message.getData}")
 
         if (this.messageQueue.size == this.batchSize) {
           val postData = getPostData
@@ -53,9 +71,10 @@ object Consumer {
   }
 
   def postBatch(postData: String): Unit = {
+    context.log.info(postData)
     val url: String = "http://" + Configuration.esUrl + Configuration.esBulkEndpoint
     val result = HttpClient.post(url, postData)
-    println(result)
+    context.log.info(result)
   }
 
   def getPostData: String = {
