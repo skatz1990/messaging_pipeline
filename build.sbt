@@ -8,7 +8,8 @@ libraryDependencies ++= Seq(
   "org.apache.kafka" % "kafka-clients" % "1.1.0",
   "ch.qos.logback" % "logback-classic" % "1.1.3" % Runtime,
   "org.scalaj" %% "scalaj-http" % "2.4.2",
-  "com.google.code.gson" % "gson" % "2.2.4"
+  "com.google.code.gson" % "gson" % "2.2.4",
+  "com.typesafe.akka" %% "akka-actor-typed" % "2.6.3"
 )
 
-mainClass in assembly := Some("me.skatz.kafka.Producer")
+mainClass in assembly := Some("me.skatz.entry_point.ActorHierarchyConsumer")
