@@ -6,7 +6,7 @@ import java.util.Properties
 import akka.actor.typed.scaladsl.{AbstractBehavior, ActorContext, Behaviors}
 import akka.actor.typed.{Behavior, PostStop, Signal}
 import me.skatz.models.Message
-import me.skatz.utils.Configuration
+import me.skatz.utils.{Configuration, KafkaUtils}
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 
 object Producer {
@@ -19,26 +19,18 @@ class Producer(context: ActorContext[String]) extends AbstractBehavior[String](c
   override def onMessage(msg: String): Behavior[String] =
     msg match {
       case "produce" =>
-        context.log.info("Producer started")
-        val props = configure()
+        context.log.info("Kafka Producer started")
+        val props = KafkaUtils.configureProducer()
         produceToKafka(props, Configuration.topicName)
-        context.log.info("Producer completed")
+        context.log.info("Kafka Producer completed")
         this
       case "stop" => Behaviors.stopped
     }
 
   override def onSignal: PartialFunction[Signal, Behavior[String]] = {
     case PostStop =>
-      context.log.info("Producer stopped")
+      context.log.info("Kafka Producer stopped")
       this
-  }
-
-  def configure(): Properties = {
-    val props = new Properties()
-    props.put("bootstrap.servers", Configuration.bootstrapServer)
-    props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-    props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-    props
   }
 
   def produceToKafka(props: Properties, topic: String): Unit = {
@@ -49,7 +41,7 @@ class Producer(context: ActorContext[String]) extends AbstractBehavior[String](c
       val message = new Message(s"Message #$i : ${LocalDateTime.now().toString}")
       val record = new ProducerRecord(topic, message.getData)
       producer.send(record)
-      context.log.info(s"SENT: ${message.getData}")
+      context.log.info(s"Message sent from Kafka Producer: ${message.getData}")
       i += 1
       Thread.sleep(1000)
     }

@@ -2,7 +2,7 @@ package me.skatz.entry_point
 
 import akka.actor.typed.scaladsl.{AbstractBehavior, ActorContext, Behaviors}
 import akka.actor.typed.{ActorSystem, Behavior}
-import me.skatz.kafka.Consumer
+import me.skatz.kafka.ElasticSearchProc
 
 object ConsumerMain {
   def apply(): Behavior[String] =
@@ -13,9 +13,9 @@ class ConsumerMain(context: ActorContext[String]) extends AbstractBehavior[Strin
   override def onMessage(msg: String): Behavior[String] =
     msg match {
       case "startConsumer" =>
-        val consumerRef = context.spawn(Consumer(), "consumer-actor")
+        val consumerRef = context.spawn(ElasticSearchProc(), "consumer-actor")
         context.log.info(s"Consumer: $consumerRef")
-        consumerRef ! "consume"
+        consumerRef ! "process"
         this
     }
 }

@@ -7,27 +7,27 @@ import akka.actor.typed.scaladsl.{AbstractBehavior, ActorContext, Behaviors}
 import akka.actor.typed.{Behavior, PostStop, Signal}
 import me.skatz.http.HttpClient
 import me.skatz.models.Message
-import me.skatz.utils.{Configuration, JsonHelper}
+import me.skatz.utils.{Configuration, JsonHelper, KafkaUtils}
 import org.apache.kafka.clients.consumer.KafkaConsumer
 
 import scala.collection.mutable
 
-object Consumer {
+object ElasticSearchProc {
   def apply(): Behavior[String] =
-    Behaviors.setup(context => new Consumer(context))
+    Behaviors.setup(context => new ElasticSearchProc(context))
 }
 
-class Consumer(context: ActorContext[String]) extends AbstractBehavior[String](context) {
+class ElasticSearchProc(context: ActorContext[String]) extends AbstractBehavior[String](context) {
   val batchSize: Int = 10
   val messageQueue: mutable.Queue[Message] = mutable.Queue[Message]()
 
   override def onMessage(msg: String): Behavior[String] =
     msg match {
-      case "consume" =>
-        context.log.info("Consumer started")
-        val props = configure()
+      case "process" =>
+        context.log.info("Elastic Search Processor started")
+        val props = KafkaUtils.configureConsumer()
         consumeFromKafka(props, Configuration.topicName)
-        context.log.info("Consumer completed")
+        context.log.info("Elastic Search Processor completed")
         this
       case "stop" => Behaviors.stopped
     }
@@ -36,16 +36,6 @@ class Consumer(context: ActorContext[String]) extends AbstractBehavior[String](c
     case PostStop =>
       context.log.info("Consumer stopped")
       this
-  }
-
-  def configure(): Properties = {
-    val props = new Properties()
-    props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
-    props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
-    props.put("bootstrap.servers", Configuration.bootstrapServer)
-    props.put("auto.offset.reset", Configuration.autoOffsetReset)
-    props.put("group.id", Configuration.groupId)
-    props
   }
 
   def consumeFromKafka(props: Properties, topic: String): Unit = {
@@ -60,7 +50,7 @@ class Consumer(context: ActorContext[String]) extends AbstractBehavior[String](c
 
         val message = new Message(next)
         this.messageQueue.enqueue(message)
-        context.log.info(s"Consumed message: ${message.getData}")
+        context.log.info(s"Elastic Search Processor: consumed message ${message.getData}")
 
         if (this.messageQueue.size == this.batchSize) {
           val postData = getPostData
@@ -68,6 +58,8 @@ class Consumer(context: ActorContext[String]) extends AbstractBehavior[String](c
         }
       }
     }
+
+    consumer.close()
   }
 
   def postBatch(postData: String): Unit = {
