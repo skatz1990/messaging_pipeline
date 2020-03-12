@@ -31,6 +31,6 @@ spec:
             - name: KAFKA_LISTENERS
               value: "PLAINTEXT://:9092"
             - name: KAFKA_CREATE_TOPICS
-              value: "our_kafka_topic:1:1"
+              value: "our_kafka_topic:2:1"
             - name: TOPIC_NAME
               value: "our_kafka_topic"

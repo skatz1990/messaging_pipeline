@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cassandra
+  labels:
+    app: cassandra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cassandra
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: cassandra
+    spec:
+      containers:
+        - image: cassandra
+          name: cassandra
+          ports:
+            - containerPort: 7000
+            - containerPort: 7001
+            - containerPort: 7199
+            - containerPort: 9042
