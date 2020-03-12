@@ -34,7 +34,7 @@ class ElasticSearchProc(context: ActorContext[String]) extends AbstractBehavior[
 
   override def onSignal: PartialFunction[Signal, Behavior[String]] = {
     case PostStop =>
-      context.log.info("Consumer stopped")
+      context.log.info("Elastic Search Processor stopped")
       this
   }
 
@@ -43,10 +43,9 @@ class ElasticSearchProc(context: ActorContext[String]) extends AbstractBehavior[
     consumer.subscribe(util.Arrays.asList(topic))
 
     while (true) {
-      val record = consumer.poll(1000)
-      val i = record.iterator
-      while (i.hasNext) {
-        val next = i.next.value()
+      val iterator = consumer.poll(1000).iterator
+      while (iterator.hasNext) {
+        val next = iterator.next.value()
 
         val message = new Message(next)
         this.messageQueue.enqueue(message)
