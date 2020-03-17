@@ -6,3 +6,4 @@ This repository contains the following components:
 - Kafka Producer
 - Elastic Search 
 - Kibana
+- Cassandra
