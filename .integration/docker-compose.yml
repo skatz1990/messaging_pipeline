@@ -89,6 +89,10 @@ services:
   cassandra:
     container_name: cassandra
     image: cassandra
+    environment:
+      cassandraUrl: '127.0.0.1'
+      cassandraPort: '7000'
+      cassandra_keyspace: 'kafka'
     ports:
       - 7000:7000
       - 7001:7001
