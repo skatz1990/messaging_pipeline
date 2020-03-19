@@ -31,6 +31,8 @@ object ElasticSearchProc extends App with DefaultJsonProtocol {
 
   val intermediateFlow = Flow[ConsumerRecord[Array[Byte], String]].map { kafkaMessage =>
     val gson = new Gson
+
+    // Deserialize JSON
     val message = gson.fromJson(kafkaMessage.value(), classOf[Message])
     WriteMessage.createIndexMessage(message)
   }

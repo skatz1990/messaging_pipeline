@@ -1,54 +1,51 @@
 package me.skatz.kafka
 
-import java.util
-import java.util.Properties
+import akka.actor.ActorSystem
+import akka.kafka.javadsl.Consumer
+import akka.kafka.{ConsumerSettings, Subscriptions}
+import akka.stream.ActorMaterializer
+import akka.stream.alpakka.cassandra.scaladsl.CassandraSink
+import akka.stream.scaladsl.Flow
+import com.datastax.driver.core.{BoundStatement, Cluster, PreparedStatement, Session}
+import com.google.gson.Gson
+import com.typesafe.config.{Config, ConfigFactory}
+import me.skatz.database.Message
+import me.skatz.utils.Configuration
+import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord}
+import org.apache.kafka.common.serialization.{ByteArrayDeserializer, StringDeserializer}
+import spray.json.DefaultJsonProtocol
 
-import akka.actor.typed.scaladsl.{AbstractBehavior, ActorContext, Behaviors}
-import akka.actor.typed.{Behavior, PostStop, Signal}
-import me.skatz.models.Message
-import me.skatz.utils.{Configuration, KafkaUtils}
-import org.apache.kafka.clients.consumer.KafkaConsumer
+object CassandraProc extends App with DefaultJsonProtocol {
+  implicit val system: ActorSystem = ActorSystem("CassandraProc")
+  implicit val materializer: ActorMaterializer = ActorMaterializer()
 
-object CassandraProc {
-  def apply(): Behavior[String] =
-    Behaviors.setup(context => new ElasticSearchProc(context))
-}
+  val config: Config = ConfigFactory.load.getConfig("akka.kafka.consumer")
+  val consumerSettings: ConsumerSettings[Array[Byte], String] = ConsumerSettings(config, new ByteArrayDeserializer, new StringDeserializer)
+    .withBootstrapServers(Configuration.bootstrapServer)
+    .withGroupId(Configuration.groupId)
+    .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
 
-class CassandraProc(context: ActorContext[String]) extends AbstractBehavior[String](context) {
+  implicit val session: Session = Cluster.builder
+    .addContactPoint(Configuration.cassandraUrl)
+    .withPort(Configuration.cassandraPort.toInt)
+    .build
+    .connect()
 
-  override def onMessage(msg: String): Behavior[String] =
-    msg match {
-      case "process" =>
-        context.log.info("Cassandra Processor started")
-        val props = KafkaUtils.configureConsumer()
-        consumeFromKafka(props, Configuration.topicName)
-        context.log.info("Cassandra Search Processor completed")
-        this
-      case "stop" => Behaviors.stopped
-    }
+  val kafkaSource = Consumer.plainSource(consumerSettings, Subscriptions.topics(Configuration.topicName))
 
-  override def onSignal: PartialFunction[Signal, Behavior[String]] = {
-    case PostStop =>
-      context.log.info("Cassandra Processor stopped")
-      this
+  // flow to map kafka message which comes as JSON string to Message
+  val toMessageFlow = Flow[ConsumerRecord[Array[Byte], String]].map(kafkaMessage => new Gson().fromJson(kafkaMessage.value(), classOf[Message]))
+
+  val sink = {
+    val statement = session.prepare(s"INSERT INTO ${Configuration.keyspace}.messages(msg_id, msg_data) VALUES (?, ?)")
+
+    // we need statement binder to convert scala case class object types into java types
+    val statementBinder: (Message, PreparedStatement) => BoundStatement = (msg, ps) =>
+      ps.bind(msg.msg_id: Integer, msg.msg_data: String)
+
+    // parallelism defines no of concurrent queries that can execute to cassandra
+    CassandraSink[Message](parallelism = 2, statement = statement, statementBinder = statementBinder)
   }
 
-  def consumeFromKafka(props: Properties, topic: String): Unit = {
-    val consumer: KafkaConsumer[String, String] = new KafkaConsumer[String, String](props)
-    consumer.subscribe(util.Arrays.asList(topic))
-
-    while (true) {
-      val iterator = consumer.poll(1000).iterator
-      while (iterator.hasNext) {
-        val next = iterator.next.value()
-
-        val message = new Message(next)
-        context.log.info(s"Cassandra Processor: consumed message ${message.getData}")
-
-        // Post to Cassandra
-      }
-    }
-
-    consumer.close()
-  }
+  kafkaSource.via(toMessageFlow).runWith(sink, system)
 }

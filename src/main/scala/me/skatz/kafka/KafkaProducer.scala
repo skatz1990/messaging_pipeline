@@ -25,7 +25,7 @@ object KafkaProducer extends App {
       .withBootstrapServers(Configuration.bootstrapServer)
 
   val producerSink: Future[Done] =
-    Source(1 to 10)
+    Source(1 to 1000000)
       .map(_.toString)
       .map(value => new ProducerRecord[String, String](Configuration.topicName, JsonHelper.parseObject(Message(value.toInt, s"data: ${value}"))))
       .runWith(Producer.plainSink(producerSettings))
