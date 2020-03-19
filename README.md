@@ -8,6 +8,8 @@ This repository contains the following components:
 - Kibana
 - Cassandra
 
+![Software Architecture](https://github.com/skatz1990/kafka_playground/blob/master/src/main/resources/Diagram.png?raw=true)
+
 Future Plans:
 - [x] Add Producer
 - [x] Add Consumer
