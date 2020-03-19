@@ -13,7 +13,7 @@ Future Plans:
 - [x] Add Consumer
 - [x] Add Elastic Search
 - [x] Integrate Kibana
-- [ ] Add Cassandra
+- [x] Add Cassandra
 - [ ] Improve Readme with an ifrastructure diagram and installation instructions
 - [ ] Change Producer to produce a more realistic data, for instance - mouse movement from the user, or keyboard input
 - [ ] Integrate Spark?
