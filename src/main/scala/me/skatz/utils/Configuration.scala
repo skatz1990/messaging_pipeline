@@ -16,4 +16,8 @@ object Configuration {
   val cassandraUrl: String = sys.env.getOrElse("cassandra_url", "127.0.0.1")
   val cassandraPort: String = sys.env.getOrElse("cassandra_port", "9042")
   val keyspace: String = sys.env.getOrElse("cassandra_keyspace", "kafka")
+
+  // HTTP Server
+  val serverUrl: String = sys.env.getOrElse("server_url", "127.0.0.1")
+  val serverPort: String = sys.env.getOrElse("server_port", "8080")
 }
