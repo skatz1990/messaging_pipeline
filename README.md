@@ -16,6 +16,8 @@ Future Plans:
 - [x] Add Elastic Search
 - [x] Integrate Kibana
 - [x] Add Cassandra
-- [ ] Improve Readme with an ifrastructure diagram and installation instructions
+- [x] Improve Readme with an ifrastructure diagram
+- [ ] Add installation instructions in Readme
 - [ ] Change Producer to produce a more realistic data, for instance - mouse movement from the user, or keyboard input
+- [ ] Integrate Nginx
 - [ ] Integrate Spark?
