@@ -16,4 +16,10 @@ object Configuration {
   val cassandraUrl: String = sys.env.getOrElse("cassandra_url", "127.0.0.1")
   val cassandraPort: String = sys.env.getOrElse("cassandra_port", "9042")
   val keyspace: String = sys.env.getOrElse("cassandra_keyspace", "kafka")
+
+  // Files Directory
+  val filesDir: String = sys.env.getOrElse("files_dir", "/src/main/resources/twitter")
+  val firstNamesFile: String = sys.env.getOrElse("fname_file", "firstname.txt")
+  val lastNamesFile: String = sys.env.getOrElse("lname_file", "surname.txt")
+  val wordsFile: String = sys.env.getOrElse("words_file", "words.txt")
 }

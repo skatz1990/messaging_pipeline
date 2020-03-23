@@ -9,7 +9,7 @@ import akka.stream.alpakka.elasticsearch.scaladsl.ElasticsearchSink
 import akka.stream.scaladsl.Flow
 import com.google.gson.Gson
 import com.typesafe.config.{Config, ConfigFactory}
-import me.skatz.database.Message
+import me.skatz.database.TweeterMessage
 import me.skatz.utils.Configuration
 import org.apache.http.HttpHost
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord}
@@ -20,6 +20,8 @@ import spray.json.{DefaultJsonProtocol, JsonFormat}
 object ElasticSearchProc extends App with DefaultJsonProtocol {
   implicit val system: ActorSystem = ActorSystem("ElasticSearchProc")
   implicit val materializer: ActorMaterializer = ActorMaterializer()
+  implicit val client: RestClient = RestClient.builder(new HttpHost(Configuration.esUrl, Configuration.esPort.toInt)).build()
+  implicit val format: JsonFormat[TweeterMessage] = jsonFormat2(TweeterMessage)
 
   val config: Config = ConfigFactory.load.getConfig("akka.kafka.consumer")
   val consumerSettings: ConsumerSettings[Array[Byte], String] = ConsumerSettings(config, new ByteArrayDeserializer, new StringDeserializer)
@@ -33,13 +35,10 @@ object ElasticSearchProc extends App with DefaultJsonProtocol {
     val gson = new Gson
 
     // Deserialize JSON
-    val message = gson.fromJson(kafkaMessage.value(), classOf[Message])
+    val message = gson.fromJson(kafkaMessage.value(), classOf[TweeterMessage])
     WriteMessage.createIndexMessage(message)
   }
 
-  implicit val client: RestClient = RestClient.builder(new HttpHost(Configuration.esUrl, Configuration.esPort.toInt)).build()
-  implicit val format: JsonFormat[Message] = jsonFormat2(Message)
-  val esSink = ElasticsearchSink.create[Message](indexName = "kafka", typeName = "type name")
-
+  val esSink = ElasticsearchSink.create[TweeterMessage](indexName = "kafka", typeName = "type name")
   kafkaSource.via(intermediateFlow).runWith(esSink, system)
 }
