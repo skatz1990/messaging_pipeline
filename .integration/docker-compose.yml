@@ -57,6 +57,10 @@ services:
       - zookeeper
     environment:
       bootstrap_servers: 'kafka:29092'
+      filesDir: '/src/main/resources/twitter'
+      firstNamesFile: 'firstname.txt'
+      lastNamesFile: 'surname.txt'
+      wordsFile: 'words.txt'
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
     container_name: elasticsearch

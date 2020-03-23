@@ -1,5 +1,7 @@
 package me.skatz.kafka
 
+import java.util.Date
+
 import akka.actor.ActorSystem
 import akka.kafka.javadsl.Consumer
 import akka.kafka.{ConsumerSettings, Subscriptions}
@@ -9,7 +11,7 @@ import akka.stream.scaladsl.Flow
 import com.datastax.driver.core.{BoundStatement, Cluster, PreparedStatement, Session}
 import com.google.gson.Gson
 import com.typesafe.config.{Config, ConfigFactory}
-import me.skatz.database.Message
+import me.skatz.database.TweeterMessage
 import me.skatz.utils.Configuration
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord}
 import org.apache.kafka.common.serialization.{ByteArrayDeserializer, StringDeserializer}
@@ -34,17 +36,17 @@ object CassandraProc extends App with DefaultJsonProtocol {
   val kafkaSource = Consumer.plainSource(consumerSettings, Subscriptions.topics(Configuration.topicName))
 
   // flow to map kafka message which comes as JSON string to Message
-  val toMessageFlow = Flow[ConsumerRecord[Array[Byte], String]].map(kafkaMessage => new Gson().fromJson(kafkaMessage.value(), classOf[Message]))
+  val toMessageFlow = Flow[ConsumerRecord[Array[Byte], String]].map(kafkaMessage => new Gson().fromJson(kafkaMessage.value(), classOf[TweeterMessage]))
 
   val sink = {
-    val statement = session.prepare(s"INSERT INTO ${Configuration.keyspace}.messages(msg_id, msg_data) VALUES (?, ?)")
+    val statement = session.prepare(s"INSERT INTO ${Configuration.keyspace}.tweets(firstName, lastName, tweet, date) VALUES (?, ?, ?, ?)")
 
     // we need statement binder to convert scala case class object types into java types
-    val statementBinder: (Message, PreparedStatement) => BoundStatement = (msg, ps) =>
-      ps.bind(msg.msg_id: Integer, msg.msg_data: String)
+    val statementBinder: (TweeterMessage, PreparedStatement) => BoundStatement = (tweet, ps) =>
+      ps.bind(tweet.firstName: String, tweet.lastName: String, tweet.tweet: String, tweet.date: Date)
 
     // parallelism defines no of concurrent queries that can execute to cassandra
-    CassandraSink[Message](parallelism = 2, statement = statement, statementBinder = statementBinder)
+    CassandraSink[TweeterMessage](parallelism = 2, statement = statement, statementBinder = statementBinder)
   }
 
   kafkaSource.via(toMessageFlow).runWith(sink, system)
