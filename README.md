@@ -18,6 +18,5 @@ Future Plans:
 - [x] Add Cassandra
 - [x] Improve Readme with an ifrastructure diagram
 - [ ] Add installation instructions in Readme
-- [ ] Change Producer to produce a more realistic data, for instance - mouse movement from the user, or keyboard input
-- [ ] Integrate Nginx
+- [x] Change Producer to produce a more realistic data, for instance - mouse movement from the user, or keyboard input
 - [ ] Integrate Spark?
