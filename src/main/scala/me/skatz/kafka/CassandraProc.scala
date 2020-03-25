@@ -1,7 +1,5 @@
 package me.skatz.kafka
 
-import java.util.Date
-
 import akka.actor.ActorSystem
 import akka.kafka.javadsl.Consumer
 import akka.kafka.{ConsumerSettings, Subscriptions}
@@ -43,7 +41,7 @@ object CassandraProc extends App with DefaultJsonProtocol {
 
     // we need statement binder to convert scala case class object types into java types
     val statementBinder: (TweeterMessage, PreparedStatement) => BoundStatement = (tweet, ps) =>
-      ps.bind(tweet.firstName: String, tweet.lastName: String, tweet.tweet: String, tweet.date: Date)
+      ps.bind(tweet.firstName: String, tweet.lastName: String, tweet.tweet: String, tweet.date: String)
 
     // parallelism defines no of concurrent queries that can execute to cassandra
     CassandraSink[TweeterMessage](parallelism = 2, statement = statement, statementBinder = statementBinder)

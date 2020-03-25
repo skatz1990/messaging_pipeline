@@ -21,7 +21,7 @@ object ElasticSearchProc extends App with DefaultJsonProtocol {
   implicit val system: ActorSystem = ActorSystem("ElasticSearchProc")
   implicit val materializer: ActorMaterializer = ActorMaterializer()
   implicit val client: RestClient = RestClient.builder(new HttpHost(Configuration.esUrl, Configuration.esPort.toInt)).build()
-  implicit val format: JsonFormat[TweeterMessage] = jsonFormat2(TweeterMessage)
+  implicit val format: JsonFormat[TweeterMessage] = jsonFormat4(TweeterMessage)
 
   val config: Config = ConfigFactory.load.getConfig("akka.kafka.consumer")
   val consumerSettings: ConsumerSettings[Array[Byte], String] = ConsumerSettings(config, new ByteArrayDeserializer, new StringDeserializer)

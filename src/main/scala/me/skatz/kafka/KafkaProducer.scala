@@ -50,6 +50,6 @@ object KafkaProducer extends App {
     for (_ <- 0 to tweetLength) {
       append(tweet, fileManager.getRandomElement)
     }
-    TweeterMessage(fname, lname, tweet.toString.trim, Calendar.getInstance().getTime)
+    TweeterMessage(fname, lname, tweet.toString.trim, Calendar.getInstance().getTime.toString)
   }
 }
