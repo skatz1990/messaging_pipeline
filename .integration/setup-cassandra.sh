@@ -6,6 +6,9 @@ docker exec -it cassandra bash
 cqlsh
 CREATE KEYSPACE kafka WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};
 CREATE TABLE kafka.tweets(
-   msg_id int PRIMARY KEY,
-   msg_data text
+    date text,
+    tweet text,
+    firstName text,
+    lastName text,
+    PRIMARY KEY ((firstName, lastName), date)
    );
