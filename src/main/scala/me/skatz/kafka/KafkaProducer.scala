@@ -19,7 +19,7 @@ import scala.concurrent.Future
 
 object KafkaProducer extends App {
   val numOfTweets: Integer = 5
-  val tweetLength: Integer = 30
+  val tweetLength: Integer = 100
 
   implicit val system: ActorSystem = ActorSystem("Producer")
   implicit val materializer: ActorMaterializer = ActorMaterializer()
