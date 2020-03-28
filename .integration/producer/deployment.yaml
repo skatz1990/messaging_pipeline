@@ -22,3 +22,11 @@ spec:
           env:
             - name: bootstrap_servers
               value: 'kafka:29092'
+            - name: files_dir
+              value: '/src/main/resources/twitter'
+            - name: fname_file
+              value: 'firstname.txt'
+            - name: lname_file
+              value: 'surname.txt'
+            - name: words_file
+              value: 'words.txt'

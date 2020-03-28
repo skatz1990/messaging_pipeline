@@ -1,7 +1,7 @@
 # !/bin/bash
 
 # For Kubernetes:
-POD=$(k get pod -l app=cassandra -o jsonpath="{.items[0].metadata.name}")
+POD=$(kubectl get pod -l app=cassandra -o jsonpath="{.items[0].metadata.name}")
 kubectl exec -it $POD bash
 
 # For Docker
