@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "playground.cassandra" . }}-deployment
+  labels:
+    app: {{ template "playground.fullname" . }}
+spec:
+  replicas: {{ default 1 .Values.cassandra.replicaCount }}
+  selector:
+    matchLabels:
+      app: cassandra
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "playground.fullname" . }}
+    spec:
+      containers:
+        - image: "{{ .Values.cassandra.image.repository }}:{{ .Values.cassandra.image.tag }}"
+          imagePullPolicy: {{ .Values.kibana.image.pullPolicy }}
+          name: cassandra
+          ports: |-
+            {{- range .Values.cassandra.ports }}
+            - containerPort: {{ . }}
+            {{- end }}

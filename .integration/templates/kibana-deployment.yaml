@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "playground.kibana" . }}-deployment
+  labels:
+    app: {{ template "playground.fullname" . }}
+spec:
+  replicas: {{ default 1 .Values.kibana.replicaCount }}
+  selector:
+    matchLabels:
+      app: kibana
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "playground.fullname" . }}
+    spec:
+      containers:
+        - image: "{{ .Values.kibana.image.repository }}:{{ .Values.kibana.image.tag }}"
+          imagePullPolicy: {{ .Values.kibana.image.pullPolicy }}
+          name: kibana
+          ports:
+            - containerPort: {{ .Values.kibana.env.port }}
+          env:
+            - name: ELASTICSEARCH_HOSTS
+              {{ $template := include "playground.elasticsearch-svc" . }}
+              {{ $port := printf "%s" .Values.elasticsearch.service.port }}
+
+              value: {{ printf "http://$s:$s" $template $port }}

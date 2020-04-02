@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "playground.kibana-svc" . }}
+  labels:
+    app: {{ template "playground.fullname" . }}
+spec:
+  type: LoadBalancer
+  ports:
+    - name: {{ .Values.kibana.service.name }}
+      port: {{ .Values.kibana.service.port }}
+      targetPort: {{ .Values.kibana.service.targetPort }}
+  selector:
+    app: {{ template "playground.fullname" . }}

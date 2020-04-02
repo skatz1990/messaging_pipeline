@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "playground.elasticsearch" . }}-deployment
+  labels:
+    app: {{ template "playground.fullname" . }}
+spec:
+  replicas: {{ default 1 .Values.elasticsearch.replicaCount }}
+  selector:
+    matchLabels:
+      app: elasticsearch
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "playground.fullname" . }}
+    spec:
+      containers:
+        - image: "{{ .Values.elasticsearch.image.repository }}:{{ .Values.elasticsearch.image.tag }}"
+          imagePullPolicy: {{ .Values.elasticsearch.image.pullPolicy }}
+          name: elasticsearch
+          env:
+            - name: xpack.security.enabled
+              value: {{ .Values.elasticsearch.env.expackSecurityEnabled | quote }}
+            - name: discovery.type
+              value: {{ .Values.elasticsearch.env.discoveryType | quote }}
+          resources:
+            # need more cpu upon initialization, therefore burstable class
+            limits:
+              cpu: {{ .Values.elasticsearch.resources.limits.cpu }}
+            requests:
+              cpu: {{ .Values.elasticsearch.resources.requests.cpu }}
+          ports: |-
+            {{- range .Values.elasticsearch.ports }}
+            - containerPort: {{ . }}
+            {{- end }}
