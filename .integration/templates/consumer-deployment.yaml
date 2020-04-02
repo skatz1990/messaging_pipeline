@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "playground.consumer" . }}-deployment
+  labels:
+    app: {{ template "playground.fullname" . }}
+spec:
+  replicas: {{ default 1 .Values.consumer.replicaCount }}
+  selector:
+    matchLabels:
+      app: consumer
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "playground.fullname" . }}
+    spec:
+      containers:
+        - name: consumer
+          image: "{{ .Values.consumer.image.repository }}"
+          imagePullPolicy: {{ .Values.consumer.image.pullPolicy }}
+          env:
+            - name: {{ .Values.consumer.env.offset_reset.name }}
+              value: {{ .Values.consumer.env.offset_reset.value }}
+            - name: {{ .Values.consumer.env.group_id.name }}
+              value: {{ .Values.consumer.env.group_id.value }}
+            - name: {{ .Values.consumer.env.topic.name }}
+              value: {{ .Values.consumer.env.topic.value }}
+
+            - name: {{ .Values.consumer.env.bootstrap_servers.name }}
+              {{ $template := include "playground.kafka-svc" . }}
+              {{ $port := printf "%s" .Values.kafka.service.port }}
+              value: {{ printf "http://$s:$s" $template $port }}
+            - name: {{ .Values.consumer.env.es_url.name }}
+              {{ $template := include "playground.elasticsearch-svc" . }}
+              {{ $port := printf "%s" .Values.elasticsearch.service.port }}
+              value: {{ printf "http://$s:$s" $template $port }}
+
+

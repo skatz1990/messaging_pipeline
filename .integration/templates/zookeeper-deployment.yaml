@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "playground.zookeeper" . }}-deployment
+  labels:
+    app: {{ template "playground.fullname" . }}
+spec:
+  replicas: {{ default 1 .Values.zookeeper.replicaCount }}
+  selector:
+    matchLabels:
+      app: zookeeper
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "playground.fullname" . }}
+    spec:
+      containers:
+        - image: "{{ .Values.zookeeper.image.repository }}:{{ .Values.zookeeper.image.tag }}"
+          imagePullPolicy: {{ .Values.zookeeper.image.pullPolicy }}
+          name: zookeeper
+          ports:
+            - containerPort: {{ .Values.zookeeper.env.port }}
+          env:
+            - name: ZOOKEEPER_CLIENT_PORT
+              value: {{ .Values.zookeeper.env.port | quote }}
+            - name: ZOOKEEPER_TICK_TIME
+              value: {{ .Values.zookeeper.env.tickTime | quote }}

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "playground.kafka" . }}-deployment
+  labels:
+    app: {{ template "playground.fullname" . }}
+spec:
+  replicas: {{ default 1 .Values.kafka.replicaCount }}
+  selector:
+    matchLabels:
+      app: kafka
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "playground.fullname" . }}
+    spec:
+      containers:
+        - name: kafka
+          image: "{{ .Values.kafka.image.repository }}:{{ .Values.kafka.image.tag }}"
+          imagePullPolicy: {{ .Values.kafka.image.pullPolicy }}
+
+          env:
+              {{- with .Values.kafka.env }}
+            - name: {{ .kafka_broker_id.name }}
+              value: {{ .kafka_broker_id.value }}
+            - name: {{ .kafka_offset.name }}
+              value: {{ .kafka_offset.value }}
+            - name: {{ .kafka_group.name }}
+              value: {{ .kafka_group.value }}
+            - name: {{ .kafka_adv_listeners.name }}
+              value: {{ .kafka_adv_listeners.value }}
+            - name: {{ .kafka_listener.name }}
+              value: {{ .kafka_listener.value }}
+            - name: {{ .kafka_create_topics.name }}
+              value: {{ .kafka_create_topics.value }}
+            - name: {{ .topic_name.name }}
+              value: {{ .topic_name.value }}
+            - name: {{ .zookeeper_connect.name }}
+              {{- end }}
+              {{ $template := include "playground.zookeeper-svc" . }}
+              {{ $port := printf "%s" .Values.zookeeper.service.port }}
+              value: {{ printf "http://$s:$s" $template $port }}
