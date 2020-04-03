@@ -1,34 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "playground.kafka" . }}-deployment
+  name: {{ include "playground.kafka" . }}-deployment
   labels:
-    app: {{ template "playground.fullname" . }}
+    {{- include "playground.labels" . | nindent 4 }}
 spec:
-  replicas: {{ default 1 .Values.kafka.replicaCount }}
+  replicas: {{ .Values.kafka.replicaCount }}
   selector:
     matchLabels:
-      app: kafka
+      {{- include "playground.selectorLabels" . | nindent 6 }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: {{ template "playground.fullname" . }}
+        {{- include "playground.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: kafka
           image: "{{ .Values.kafka.image.repository }}:{{ .Values.kafka.image.tag }}"
           imagePullPolicy: {{ .Values.kafka.image.pullPolicy }}
-
           env:
               {{- with .Values.kafka.env }}
             - name: {{ .kafka_broker_id.name }}
-              value: {{ .kafka_broker_id.value }}
+              value: {{ .kafka_broker_id.value | quote }}
             - name: {{ .kafka_offset.name }}
-              value: {{ .kafka_offset.value }}
+              value: {{ .kafka_offset.value | quote }}
             - name: {{ .kafka_group.name }}
-              value: {{ .kafka_group.value }}
+              value: {{ .kafka_group.value | quote }}
             - name: {{ .kafka_adv_listeners.name }}
               value: {{ .kafka_adv_listeners.value }}
             - name: {{ .kafka_listener.name }}

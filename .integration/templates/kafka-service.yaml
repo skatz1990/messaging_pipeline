@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "playground.kafka-svc" . }}
+  name: {{ include "playground.kafka-svc" . }}
   labels:
-    app: {{ template "playground.fullname" . }}
+    {{- include "playground.labels" . | nindent 4 }}
 spec:
   type: LoadBalancer
   ports:
-    - name: kafka
-      port: {{ .Values.kafka.service.port }}
+    - port: {{ .Values.zookeeper.service.port }}
+      name: {{ .Values.zookeeper.service.name }}
   selector:
-    app: {{ template "playground.fullname" . }}
+    {{- include "playground.selectorLabels" . | nindent 4 }}
