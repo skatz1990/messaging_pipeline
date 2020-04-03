@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "playground.elasticsearch" . }}-deployment
+  name: {{ include "playground.elasticsearch" . }}-deployment
   labels:
-    app: {{ template "playground.fullname" . }}
+    {{- include "playground.labels" . | nindent 4 }}
 spec:
-  replicas: {{ default 1 .Values.elasticsearch.replicaCount }}
+  replicas: {{ .Values.zookeeper.replicaCount }}
   selector:
     matchLabels:
-      app: elasticsearch
+      {{- include "playground.selectorLabels" . | nindent 6 }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: {{ template "playground.fullname" . }}
+        {{- include "playground.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - image: "{{ .Values.elasticsearch.image.repository }}:{{ .Values.elasticsearch.image.tag }}"
@@ -31,7 +31,7 @@ spec:
               cpu: {{ .Values.elasticsearch.resources.limits.cpu }}
             requests:
               cpu: {{ .Values.elasticsearch.resources.requests.cpu }}
-          ports: |-
+          ports:
             {{- range .Values.elasticsearch.ports }}
             - containerPort: {{ . }}
             {{- end }}

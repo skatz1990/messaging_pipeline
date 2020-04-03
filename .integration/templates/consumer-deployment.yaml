@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "playground.consumer" . }}-deployment
+  name: {{ include "playground.consumer" . }}-deployment
   labels:
-    app: {{ template "playground.fullname" . }}
+    {{- include "playground.labels" . | nindent 4 }}
 spec:
-  replicas: {{ default 1 .Values.consumer.replicaCount }}
+  replicas: {{ .Values.consumer.replicaCount }}
   selector:
     matchLabels:
-      app: consumer
+      {{- include "playground.selectorLabels" . | nindent 6 }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: {{ template "playground.fullname" . }}
+        {{- include "playground.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: consumer
