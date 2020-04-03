@@ -20,7 +20,8 @@ Future Plans:
 - [ ] Add installation instructions in Readme
 - [x] Change Producer to produce a more realistic data, for instance - mouse movement from the user, or keyboard input
 - [ ] Integrate Spark?
-- [ ] Use Helm Charts
+- [x] Use Helm Charts
+- [ ] Use multiple Kafka topics
 
 ## Installation Steps for Docker:
 
