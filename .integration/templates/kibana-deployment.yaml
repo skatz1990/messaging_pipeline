@@ -24,7 +24,7 @@ spec:
             - containerPort: {{ .Values.kibana.env.port }}
           env:
             - name: ELASTICSEARCH_HOSTS
-              {{ $template := include "playground.elasticsearch-svc" . }}
-              {{ $port := printf "%s" .Values.elasticsearch.service.port }}
-
-              value: {{ printf "http://$s:$s" $template $port }}
+              {{- define "esUrl" }}
+              {{- printf "http://%s:%.0f" (include "playground.elasticsearch-svc" .) .Values.elasticsearch.service.port }}
+              {{- end }}
+              value: {{ template "esUrl" . }}

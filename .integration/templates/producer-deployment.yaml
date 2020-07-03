@@ -24,7 +24,7 @@ spec:
             - name: {{ .Values.producer.env.bootstrap_servers.name }}
               {{ $template := include "playground.kafka-svc" . }}
               {{ $port := printf "%s" .Values.kafka.service.port }}
-              value: {{ printf "http://$s:$s" $template $port }}
+              value: {{ printf "http://%s:%.0f" $template $port }}
             - name: {{ .Values.producer.env.directory.name }}
               value: {{ .Values.producer.env.directory.value }}
             - name: {{ .Values.producer.env.first_name.name }}

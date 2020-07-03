@@ -38,6 +38,7 @@ spec:
               value: {{ .topic_name.value }}
             - name: {{ .zookeeper_connect.name }}
               {{- end }}
-              {{ $template := include "playground.zookeeper-svc" . }}
-              {{ $port := printf "%s" .Values.zookeeper.service.port }}
-              value: {{ printf "http://$s:$s" $template $port }}
+              {{- define "zk" }}
+              {{- printf "http://%s:%.0f" (include "playground.zookeeper-svc" .) .Values.zookeeper.service.port }}
+              {{- end }}
+              value: {{ template "zk" . }}
