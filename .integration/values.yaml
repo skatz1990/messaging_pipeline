@@ -150,7 +150,6 @@ producer:
   replicaCount: 1
   image:
     repository: kafka-producer
-    tag: 1.0
     pullPolicy: Always
   env:
     bootstrap_servers:

@@ -29,23 +29,39 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_INTERNAL
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
       topic_name: "our_kafka_topic"
-  kafka-consumer:
-    image: kafka-consumer
-    container_name: kafka-consumer
+  cassandraproc:
+    image: cassandraproc
+    container_name: cassandraproc
     depends_on:
+      - cassandra
       - kafka
-      - zookeeper
-      - elasticsearch
     links:
       - kafka
-      - zookeeper
+      - cassandra
     environment:
-      bootstrap_servers: 'kafka:29092'
-      elasticsearch_url: 'elasticsearch:9200'
-      elasticsearch_bulk_endpoint: '/kafka_data/_doc/_bulk'
       auto_offset_reset: 'latest'
       group_id: 'consumer-group'
-      topic_name: "our_kafka_topic"
+      topic_name: 'our_kafka_topic'
+      bootstrap_servers: 'kafka:29092'
+      cassandra_url: cassandra
+      cassandra_port: 7000
+      cassandra_keyspace: kafka
+  esproc:
+    image: esproc
+    container_name: esproc
+    depends_on:
+      - elasticsearch
+      - kafka
+    links:
+      - elasticsearch
+      - kafka
+    environment:
+      offset_reset: 'latest'
+      group_id: 'consumer-group'
+      topic_name: 'our_kafka_topic'
+      bootstrap_servers: 'kafka:29092'
+      elasticsearch_url: elasticsearch
+      elasticsearch_port: 9200    
   kafka-producer:
     image: kafka-producer
     container_name: kafka-producer
