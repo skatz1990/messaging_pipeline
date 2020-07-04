@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "playground.cassandraproc" . }}-deployment
+  labels:
+    {{- include "playground.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.cassandraproc.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "playground.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "playground.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: cassandraproc
+          image: "{{ .Values.cassandraproc.image.repository }}"
+          imagePullPolicy: {{ .Values.cassandraproc.image.pullPolicy }}
+          env:
+            - name: {{ .Values.cassandraproc.env.offset_reset.name }}
+              value: {{ .Values.cassandraproc.env.offset_reset.value }}
+            - name: {{ .Values.cassandraproc.env.group_id.name }}
+              value: {{ .Values.cassandraproc.env.group_id.value }}
+            - name: {{ .Values.cassandraproc.env.topic.name }}
+              value: {{ .Values.cassandraproc.env.topic.value }}
+            - name: {{ .Values.cassandraproc.env.bootstrap_servers.name }}
+              value: {{ printf "http://%s:%.0f" (include "playground.kafka-svc" .) .Values.kafka.service.port }}
+            - name: {{ .Values.cassandraproc.env.cassandra_url.name }}
+              value: {{ .Values.cassandraproc.env.cassandra_url.value }}
+            - name: {{ .Values.cassandraproc.env.cassandra_port.name }}
+              value: {{ .Values.cassandraproc.env.cassandra_port.value }}
+            - name: {{ .Values.cassandraproc.env.cassandra_ks.name }}
+              value: {{ .Values.cassandraproc.env.cassandra_ks.value }}

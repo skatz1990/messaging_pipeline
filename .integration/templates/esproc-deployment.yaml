@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "playground.esproc" . }}-deployment
+  labels:
+    {{- include "playground.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.esproc.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "playground.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "playground.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: esproc
+          image: "{{ .Values.esproc.image.repository }}"
+          imagePullPolicy: {{ .Values.esproc.image.pullPolicy }}
+          env:
+            - name: {{ .Values.esproc.env.offset_reset.name }}
+              value: {{ .Values.esproc.env.offset_reset.value }}
+            - name: {{ .Values.esproc.env.group_id.name }}
+              value: {{ .Values.esproc.env.group_id.value }}
+            - name: {{ .Values.esproc.env.topic.name }}
+              value: {{ .Values.esproc.env.topic.value }}
+            - name: {{ .Values.esproc.env.bootstrap_servers.name }}
+              value: {{ printf "http://%s:%.0f" (include "playground.kafka-svc" .) .Values.kafka.service.port }}
+            - name: {{ .Values.esproc.env.es_url.name }}
+              value: {{ .Values.esproc.env.es_url.value }}
+            - name: {{ .Values.esproc.env.es_port.name }}
+              value: {{ .Values.esproc.env.es_port.value }}

@@ -102,10 +102,14 @@ Create the name of the service account to use
 {{- printf "%s-%s" .Release.Name "kafka-svc" | trunc 63 -}}
 {{- end -}}
 
-{{- define "playground.consumer" -}}
-{{- printf "%s-%s" .Release.Name "consumer" | trunc 63 -}}
-{{- end -}}
-
 {{- define "playground.producer" -}}
 {{- printf "%s-%s" .Release.Name "producer" | trunc 63 -}}
+{{- end -}}
+
+{{- define "playground.esproc" -}}
+{{- printf "%s-%s" .Release.Name "esproc" | trunc 63 -}}
+{{- end -}}
+
+{{- define "playground.cassandraproc" -}}
+{{- printf "%s-%s" .Release.Name "cassandraproc" | trunc 63 -}}
 {{- end -}}
