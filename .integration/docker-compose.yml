@@ -28,7 +28,6 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_INTERNAL:PLAINTEXT,LISTENER_EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_INTERNAL
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
-      topic_name: "our_kafka_topic"
   cassandraproc:
     image: cassandraproc
     container_name: cassandraproc
@@ -41,7 +40,7 @@ services:
     environment:
       auto_offset_reset: 'latest'
       group_id: 'consumer-group'
-      topic_name: 'our_kafka_topic'
+      enrich_cassproc_topic: 'enrich_cassproc'
       bootstrap_servers: 'kafka:29092'
       cassandra_url: cassandra
       cassandra_port: 7000
@@ -58,7 +57,7 @@ services:
     environment:
       offset_reset: 'latest'
       group_id: 'consumer-group'
-      topic_name: 'our_kafka_topic'
+      enrich_esproc_topic: 'enrich_esproc'
       bootstrap_servers: 'kafka:29092'
       elasticsearch_url: elasticsearch
       elasticsearch_port: 9200    

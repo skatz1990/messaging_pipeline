@@ -29,7 +29,7 @@ object ElasticSearchProc extends App with DefaultJsonProtocol {
     .withGroupId(Configuration.groupId)
     .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
 
-  val kafkaSource = Consumer.plainSource(consumerSettings, Subscriptions.topics(Configuration.topicName))
+  val kafkaSource = Consumer.plainSource(consumerSettings, Subscriptions.topics(Configuration.enrichEsprocTopic))
 
   val intermediateFlow = Flow[ConsumerRecord[Array[Byte], String]].map { kafkaMessage =>
     val gson = new Gson
