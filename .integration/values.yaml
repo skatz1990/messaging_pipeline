@@ -88,10 +88,10 @@ kafka:
       value: "PLAINTEXT://:9092"
     kafka_create_topics:
       name: KAFKA_CREATE_TOPICS
-      value: "our_kafka_topic:2:1"
+      value: "ingest_enrich:2:1"
     topic_name:
       name: TOPIC_NAME
-      value: "our_kafka_topic"
+      value: "ingest_enrich"
     zookeeper_connect:
       name: KAFKA_ZOOKEEPER_CONNECT
 
@@ -108,8 +108,8 @@ esproc:
       name: group_id
       value: "consumer-group"
     topic:
-      name: topic_name
-      value: "our_kafka_topic"
+      name: enrich_esproc_topic
+      value: "enrich_esproc"
     bootstrap_servers:
       name: bootstrap_servers
     es_url:
@@ -132,8 +132,8 @@ cassandraproc:
       name: group_id
       value: "consumer-group"
     topic:
-      name: topic_name
-      value: "our_kafka_topic"
+      name: enrich_cassproc_topic
+      value: "enrich_cassproc"
     bootstrap_servers:
       name: bootstrap_servers
     cassandra_url:

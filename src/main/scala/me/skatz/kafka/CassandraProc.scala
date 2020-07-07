@@ -31,7 +31,7 @@ object CassandraProc extends App with DefaultJsonProtocol {
     .build
     .connect()
 
-  val kafkaSource = Consumer.plainSource(consumerSettings, Subscriptions.topics(Configuration.topicName))
+  val kafkaSource = Consumer.plainSource(consumerSettings, Subscriptions.topics(Configuration.enrichCassTopic))
 
   // flow to map kafka message which comes as JSON string to Message
   val toMessageFlow = Flow[ConsumerRecord[Array[Byte], String]].map(kafkaMessage => new Gson().fromJson(kafkaMessage.value(), classOf[TweeterMessage]))

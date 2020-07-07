@@ -30,8 +30,14 @@ docker-compose up -d kafka
 sleep 20
 # Create the topic
 runCommand \
-  "Creating kafka topic" \
-  "docker-compose exec kafka kafka-topics --create --topic our_kafka_topic --partitions 2 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181"
+  "Creating ingest_enrich topic" \
+  "docker-compose exec kafka kafka-topics --create --topic ingest_enrich --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181"
+runCommand \
+  "Creating enrich_esproc topic" \
+  "docker-compose exec kafka kafka-topics --create --topic enrich_esproc --partitions 2 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181"
+runCommand \
+  "Creating enrich_cassproc topic" \
+  "docker-compose exec kafka kafka-topics --create --topic enrich_cassproc --partitions 2 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181"
 
 docker-compose up -d
 

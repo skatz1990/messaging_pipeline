@@ -25,7 +25,7 @@ object KafkaProducer extends App {
   val producerSink: Future[Done] =
     Source(1 to MessageGenerator.numOfTweets)
       .map(_ => new ProducerRecord[String, String](
-        Configuration.topicName,
+        Configuration.enrichEsprocTopic,
         JsonHelper.parseObject(MessageGenerator.generateTweetMsg())))
       .runWith(Producer.plainSink(producerSettings))
 
