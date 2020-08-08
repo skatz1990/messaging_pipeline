@@ -24,8 +24,7 @@ echo "Running docker compose up. Docker version $DOCKER_VERSION. Compose version
 echo "If it's up, we're bringing it down..."
 docker-compose down -v # Remove -v for persistent volume
 echo "Bringing it up!"
-docker-compose up -d elasticsearch # Bringing it up first because it takes a moment to come up
-docker-compose up -d kafka
+docker-compose up -d
 
 sleep 20
 # Create the topic
@@ -33,13 +32,11 @@ runCommand \
   "Creating ingest_enrich topic" \
   "docker-compose exec kafka kafka-topics --create --topic ingest_enrich --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181"
 runCommand \
-  "Creating enrich_esproc topic" \
-  "docker-compose exec kafka kafka-topics --create --topic enrich_esproc --partitions 2 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181"
-runCommand \
   "Creating enrich_cassproc topic" \
   "docker-compose exec kafka kafka-topics --create --topic enrich_cassproc --partitions 2 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181"
-
-docker-compose up -d
+runCommand \
+  "Creating enrich_esproc topic" \
+  "docker-compose exec kafka kafka-topics --create --topic enrich_esproc --partitions 2 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181"
 
 if [[ "$?" == "1" ]]; then
   echo "Failed to start docker images."
