@@ -5,7 +5,6 @@ import akka.actor.ActorSystem
 import akka.kafka.scaladsl.Producer
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
-import com.typesafe.config.ConfigFactory
 import me.skatz.utils.{Configuration, JsonHelper, KafkaUtils, MessageGenerator}
 import org.apache.kafka.clients.producer.ProducerRecord
 

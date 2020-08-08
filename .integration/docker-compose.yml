@@ -60,7 +60,7 @@ services:
       enrich_esproc_topic: 'enrich_esproc'
       bootstrap_servers: 'kafka:29092'
       elasticsearch_url: elasticsearch
-      elasticsearch_port: 9200    
+      elasticsearch_port: 9200
   kafka-producer:
     image: kafka-producer
     container_name: kafka-producer

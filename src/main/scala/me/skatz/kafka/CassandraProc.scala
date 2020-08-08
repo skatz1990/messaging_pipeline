@@ -3,7 +3,6 @@ package me.skatz.kafka
 import akka.actor.ActorSystem
 import akka.kafka.Subscriptions
 import akka.kafka.javadsl.Consumer
-import akka.stream.ActorMaterializer
 import akka.stream.alpakka.cassandra.scaladsl.CassandraSink
 import akka.stream.scaladsl.Flow
 import com.datastax.driver.core.{BoundStatement, Cluster, PreparedStatement, Session}
@@ -15,7 +14,7 @@ import spray.json.DefaultJsonProtocol
 
 object CassandraProc extends App with DefaultJsonProtocol {
   implicit val system: ActorSystem = ActorSystem("CassandraProc")
-  implicit val materializer: ActorMaterializer = ActorMaterializer()
+  implicit val actorSystem: ActorSystem = ActorSystem()
 
   val consumerSettings = KafkaUtils.configureConsumerSettings()
 
@@ -28,7 +27,10 @@ object CassandraProc extends App with DefaultJsonProtocol {
   val kafkaSource = Consumer.plainSource(consumerSettings, Subscriptions.topics(Configuration.enrichCassTopic))
 
   // flow to map kafka message which comes as JSON string to Message
-  val toMessageFlow = Flow[ConsumerRecord[Array[Byte], String]].map(kafkaMessage => new Gson().fromJson(kafkaMessage.value(), classOf[TweeterMessage]))
+  val toMessageFlow = Flow[ConsumerRecord[Array[Byte], String]]
+    .map(kafkaMessage =>
+      new Gson().fromJson(kafkaMessage.value(), classOf[TweeterMessage])
+    )
 
   val sink = {
     val statement = session.prepare(s"INSERT INTO ${Configuration.keyspace}.tweets(firstName, lastName, tweet, date) VALUES (?, ?, ?, ?)")
