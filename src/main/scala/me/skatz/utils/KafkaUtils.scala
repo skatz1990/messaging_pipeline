@@ -1,24 +1,23 @@
 package me.skatz.utils
 
-import java.util.Properties
+import akka.kafka.{ConsumerSettings, ProducerSettings}
+import com.typesafe.config.{Config, ConfigFactory}
+import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.common.serialization.{ByteArrayDeserializer, StringDeserializer, StringSerializer}
 
 object KafkaUtils {
-  def configureConsumer(): Properties = {
-    val props = new Properties()
-    props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
-    props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")
-    props.put("bootstrap.servers", Configuration.bootstrapServer)
-    props.put("auto.offset.reset", Configuration.autoOffsetReset)
-    props.put("group.id", Configuration.groupId)
-    props
+  def configureConsumerSettings(): ConsumerSettings[Array[Byte], String] = {
+    val consumerConfig: Config = ConfigFactory.load.getConfig("akka.kafka.consumer")
+    ConsumerSettings(consumerConfig, new ByteArrayDeserializer, new StringDeserializer)
+      .withBootstrapServers(Configuration.bootstrapServer)
+      .withGroupId(Configuration.groupId)
+      .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
   }
 
-  def configureProducer(): Properties = {
-    val props = new Properties()
-    props.put("bootstrap.servers", Configuration.bootstrapServer)
-    props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-    props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
-    props
+  def configureProducerSettings(): ProducerSettings[String, String] = {
+    val producerConfig = ConfigFactory.load.getConfig("akka.kafka.producer")
+    ProducerSettings(producerConfig, new StringSerializer, new StringSerializer)
+      .withBootstrapServers(Configuration.bootstrapServer)
   }
 
 }
