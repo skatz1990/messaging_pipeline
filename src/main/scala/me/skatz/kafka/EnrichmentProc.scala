@@ -5,6 +5,7 @@ import akka.kafka.scaladsl.{Consumer, Producer}
 import akka.kafka.{CommitterSettings, ProducerMessage, Subscriptions}
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Keep
+import com.sksamuel.avro4s.json.JsonToAvroConverter
 import me.skatz.utils.{Configuration, KafkaUtils}
 import org.apache.kafka.clients.producer.ProducerRecord
 import spray.json.DefaultJsonProtocol
@@ -22,12 +23,17 @@ object EnrichmentProc extends App with DefaultJsonProtocol {
     .map { msg =>
       ProducerMessage.multi(
         List[ProducerRecord[String, String]](
-          new ProducerRecord[String, String](Configuration.enrichEsprocTopic, msg.record.value),
-          new ProducerRecord[String, String](Configuration.enrichCassTopic, msg.record.value)
+          new ProducerRecord[String, String](Configuration.enrichEsprocTopic, jsonToAvro(msg.record.value)),
+          new ProducerRecord[String, String](Configuration.enrichCassTopic, jsonToAvro(msg.record.value))
         ),
         msg.committableOffset
       )
     }
     .toMat(Producer.committableSink(producerSettings, committerSettings))(Keep.both)
     .run()
+
+  def jsonToAvro(msg: String): String = {
+    val converter = new JsonToAvroConverter("me.skatz.kafka")
+    converter.convert("test", msg).toString(true)
+  }
 }
