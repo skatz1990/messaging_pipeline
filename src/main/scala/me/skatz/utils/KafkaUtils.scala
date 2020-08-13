@@ -19,5 +19,4 @@ object KafkaUtils {
     ProducerSettings(producerConfig, new StringSerializer, new StringSerializer)
       .withBootstrapServers(Configuration.bootstrapServer)
   }
-
 }
