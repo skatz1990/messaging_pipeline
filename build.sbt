@@ -10,6 +10,8 @@ libraryDependencies ++= Seq(
   "org.apache.kafka" % "kafka-clients" % "1.1.0",
   "ch.qos.logback" % "logback-classic" % "1.1.3" % Runtime,
   "com.google.code.gson" % "gson" % "2.2.4",
+  "com.sksamuel.avro4s" %% "avro4s-core" % "3.0.9",
+  "com.sksamuel.avro4s" %% "avro4s-json" % "3.0.9",
   "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
   "com.typesafe.akka" %% "akka-stream" % akkaVersion,
   "com.typesafe.akka" %% "akka-protobuf" % akkaVersion,
