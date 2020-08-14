@@ -6,12 +6,11 @@ import akka.kafka.{ConsumerSettings, Subscriptions}
 import akka.stream.alpakka.cassandra.scaladsl.CassandraSink
 import akka.stream.scaladsl.Flow
 import com.datastax.driver.core.{BoundStatement, Cluster, PreparedStatement, Session}
-import com.google.gson.Gson
 import com.typesafe.config.{Config, ConfigFactory}
 import me.skatz.database.TweeterMessage
-import me.skatz.utils.Configuration
+import me.skatz.utils.{AvroMessageSerializer, Configuration}
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord}
-import org.apache.kafka.common.serialization.{ByteArrayDeserializer, StringDeserializer}
+import org.apache.kafka.common.serialization.ByteArrayDeserializer
 import spray.json.DefaultJsonProtocol
 
 object CassandraProc extends App with DefaultJsonProtocol {
@@ -19,7 +18,7 @@ object CassandraProc extends App with DefaultJsonProtocol {
   implicit val actorSystem: ActorSystem = ActorSystem()
 
   val consumerConfig: Config = ConfigFactory.load.getConfig("akka.kafka.consumer")
-  val consumerSettings = ConsumerSettings(consumerConfig, new ByteArrayDeserializer, new StringDeserializer)
+  val consumerSettings = ConsumerSettings(consumerConfig, new ByteArrayDeserializer, new ByteArrayDeserializer)
     .withBootstrapServers(Configuration.bootstrapServer)
     .withGroupId(Configuration.groupId)
     .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
@@ -32,10 +31,9 @@ object CassandraProc extends App with DefaultJsonProtocol {
 
   Consumer
     .plainSource(consumerSettings, Subscriptions.topics(Configuration.enrichCassTopic))
-    .via(Flow[ConsumerRecord[Array[Byte], String]]
-      .map(kafkaMessage =>
-        new Gson().fromJson(kafkaMessage.value(), classOf[TweeterMessage])
-      ))
+    .via(Flow[ConsumerRecord[Array[Byte], Array[Byte]]].map { kafkaMessage =>
+      AvroMessageSerializer.genericByteArrayToMessage(kafkaMessage.value).get
+    })
     .runWith({
       val statement = session.prepare(s"INSERT INTO ${Configuration.keyspace}.tweets(firstName, lastName, tweet, date) VALUES (?, ?, ?, ?)")
 
