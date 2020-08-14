@@ -1,15 +1,14 @@
 package me.skatz.kafka
 
 import akka.actor.ActorSystem
+import akka.kafka.Subscriptions
 import akka.kafka.javadsl.Consumer
-import akka.kafka.{ConsumerSettings, Subscriptions}
 import akka.stream.alpakka.cassandra.scaladsl.CassandraSink
 import akka.stream.scaladsl.Flow
 import com.datastax.driver.core.{BoundStatement, Cluster, PreparedStatement, Session}
-import com.typesafe.config.{Config, ConfigFactory}
 import me.skatz.database.TweeterMessage
-import me.skatz.utils.{AvroMessageSerializer, Configuration}
-import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord}
+import me.skatz.utils.{AvroMessageSerializer, Configuration, KafkaUtils}
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.serialization.ByteArrayDeserializer
 import spray.json.DefaultJsonProtocol
 
@@ -17,11 +16,7 @@ object CassandraProc extends App with DefaultJsonProtocol {
   implicit val system: ActorSystem = ActorSystem("CassandraProc")
   implicit val actorSystem: ActorSystem = ActorSystem()
 
-  val consumerConfig: Config = ConfigFactory.load.getConfig("akka.kafka.consumer")
-  val consumerSettings = ConsumerSettings(consumerConfig, new ByteArrayDeserializer, new ByteArrayDeserializer)
-    .withBootstrapServers(Configuration.bootstrapServer)
-    .withGroupId(Configuration.groupId)
-    .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
+  val consumerSettings = KafkaUtils.configureConsumerSettings(new ByteArrayDeserializer, new ByteArrayDeserializer)
 
   implicit val session: Session = Cluster.builder
     .addContactPoint(Configuration.cassandraUrl)
