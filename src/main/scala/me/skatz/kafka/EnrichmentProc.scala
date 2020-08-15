@@ -1,6 +1,7 @@
 package me.skatz.kafka
 
 import akka.actor.ActorSystem
+import akka.event.{Logging, LoggingAdapter}
 import akka.kafka.scaladsl.{Consumer, Producer}
 import akka.kafka.{CommitterSettings, ProducerMessage, Subscriptions}
 import akka.stream.ActorMaterializer
@@ -13,11 +14,12 @@ import spray.json.DefaultJsonProtocol
 object EnrichmentProc extends App with DefaultJsonProtocol {
   implicit val system: ActorSystem = ActorSystem("EnrichmentProc")
   implicit val materializer: ActorMaterializer = ActorMaterializer()
+  implicit val log: LoggingAdapter = Logging.getLogger(ActorSystem.create,this)
 
   val consumerSettings = KafkaUtils.configureConsumerSettings(new StringDeserializer, new StringDeserializer)
   val producerSettings = KafkaUtils.configureProducerSettings(new StringSerializer, new ByteArraySerializer)
-
   val committerSettings = CommitterSettings(system).withMaxBatch(1L).withParallelism(1)
+  log.info("EnrichmentProc started")
 
   Consumer
     .committableSource(consumerSettings, Subscriptions.topics(Configuration.ingestEnrichTopic))

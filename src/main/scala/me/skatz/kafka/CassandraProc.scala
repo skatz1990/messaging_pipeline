@@ -1,6 +1,7 @@
 package me.skatz.kafka
 
 import akka.actor.ActorSystem
+import akka.event.{Logging, LoggingAdapter}
 import akka.kafka.Subscriptions
 import akka.kafka.javadsl.Consumer
 import akka.stream.alpakka.cassandra.scaladsl.CassandraSink
@@ -15,6 +16,7 @@ import spray.json.DefaultJsonProtocol
 object CassandraProc extends App with DefaultJsonProtocol {
   implicit val system: ActorSystem = ActorSystem("CassandraProc")
   implicit val actorSystem: ActorSystem = ActorSystem()
+  implicit val log: LoggingAdapter = Logging.getLogger(ActorSystem.create,this)
 
   val consumerSettings = KafkaUtils.configureConsumerSettings(new ByteArrayDeserializer, new ByteArrayDeserializer)
 
@@ -23,6 +25,7 @@ object CassandraProc extends App with DefaultJsonProtocol {
     .withPort(Configuration.cassandraPort.toInt)
     .build
     .connect()
+  log.info("CassandraProc started")
 
   Consumer
     .plainSource(consumerSettings, Subscriptions.topics(Configuration.enrichCassTopic))

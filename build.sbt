@@ -12,6 +12,7 @@ libraryDependencies ++= Seq(
   "com.google.code.gson" % "gson" % "2.2.4",
   "com.sksamuel.avro4s" %% "avro4s-core" % "3.0.9",
   "com.sksamuel.avro4s" %% "avro4s-json" % "3.0.9",
+  "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
   "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
   "com.typesafe.akka" %% "akka-stream" % akkaVersion,
   "com.typesafe.akka" %% "akka-protobuf" % akkaVersion,
