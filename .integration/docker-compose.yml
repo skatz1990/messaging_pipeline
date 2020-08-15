@@ -9,6 +9,10 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://:5000"
   kafka:
     image: confluentinc/cp-kafka:latest
     hostname: kafka
@@ -28,6 +32,10 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_INTERNAL:PLAINTEXT,LISTENER_EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_INTERNAL
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://:5000"
   cassandraproc:
     image: cassandraproc
     container_name: cassandraproc
@@ -45,6 +53,10 @@ services:
       cassandra_url: cassandra
       cassandra_port: 7000
       cassandra_keyspace: kafka
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://:5000"
   esproc:
     image: esproc
     container_name: esproc
@@ -61,6 +73,10 @@ services:
       bootstrap_servers: 'kafka:29092'
       elasticsearch_url: elasticsearch
       elasticsearch_port: 9200
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://:5000"
   kafka-producer:
     image: kafka-producer
     container_name: kafka-producer
@@ -76,6 +92,10 @@ services:
       firstNamesFile: 'firstname.txt'
       lastNamesFile: 'surname.txt'
       wordsFile: 'words.txt'
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://:5000"
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
     container_name: elasticsearch
@@ -117,6 +137,36 @@ services:
       - 7001:7001
       - 7199:7199
       - 9042:9042
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://:5000"
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    user: "104"
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://:5000"
+  logstash:
+    container_name: logstash
+    image: docker.elastic.co/logstash/logstash:7.8.1
+    ports:
+      - 5000:5000
+      - 5044:5044
+      - 9600:9600
+    depends_on:
+      - elasticsearch
+    command: logstash -f /etc/logstash/conf.d/logstash.conf
+    volumes:
+      - ./logstash/logstash.conf:/etc/logstash/conf.d/logstash.conf:ro
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://:5000"
 volumes:
   elasticsearch-data:
     driver: local

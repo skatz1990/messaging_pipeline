@@ -1,6 +1,7 @@
 package me.skatz.kafka
 
 import akka.actor.ActorSystem
+import akka.event.{Logging, LoggingAdapter}
 import akka.kafka.Subscriptions
 import akka.kafka.javadsl.Consumer
 import akka.stream.ActorMaterializer
@@ -20,8 +21,10 @@ object ElasticSearchProc extends App with DefaultJsonProtocol {
   implicit val materializer: ActorMaterializer = ActorMaterializer()
   implicit val client: RestClient = RestClient.builder(new HttpHost(Configuration.esUrl, Configuration.esPort.toInt)).build()
   implicit val format: JsonFormat[TweeterMessage] = jsonFormat4(TweeterMessage)
+  implicit val log: LoggingAdapter = Logging.getLogger(ActorSystem.create,this)
 
   val consumerSettings = KafkaUtils.configureConsumerSettings(new ByteArrayDeserializer, new ByteArrayDeserializer)
+  log.info("ElasticSearchProc started")
 
   Consumer
     .plainSource(consumerSettings, Subscriptions.topics(Configuration.enrichEsprocTopic))
