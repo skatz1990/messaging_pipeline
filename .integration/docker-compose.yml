@@ -12,7 +12,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://:5000"
+        syslog-address: "tcp://localhost:5000"
   kafka:
     image: confluentinc/cp-kafka:latest
     hostname: kafka
@@ -35,7 +35,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://:5000"
+        syslog-address: "tcp://localhost:5000"
   cassandraproc:
     image: cassandraproc
     container_name: cassandraproc
@@ -56,7 +56,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://:5000"
+        syslog-address: "tcp://localhost:5000"
   esproc:
     image: esproc
     container_name: esproc
@@ -76,7 +76,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://:5000"
+        syslog-address: "tcp://localhost:5000"
   kafka-producer:
     image: kafka-producer
     container_name: kafka-producer
@@ -95,7 +95,7 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://:5000"
+        syslog-address: "tcp://localhost:5000"
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
     container_name: elasticsearch
@@ -140,17 +140,19 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://:5000"
+        syslog-address: "tcp://localhost:5000"
   grafana:
     container_name: grafana
     image: grafana/grafana:latest
     ports:
       - 3000:3000
     user: "104"
+    depends_on:
+      - elasticsearch
     logging:
       driver: syslog
       options:
-        syslog-address: "tcp://:5000"
+        syslog-address: "tcp://localhost:5000"
   logstash:
     container_name: logstash
     image: docker.elastic.co/logstash/logstash:7.8.1
@@ -163,10 +165,6 @@ services:
     command: logstash -f /etc/logstash/conf.d/logstash.conf
     volumes:
       - ./logstash/logstash.conf:/etc/logstash/conf.d/logstash.conf:ro
-    logging:
-      driver: syslog
-      options:
-        syslog-address: "tcp://:5000"
 volumes:
   elasticsearch-data:
     driver: local
