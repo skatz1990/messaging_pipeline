@@ -1,6 +1,7 @@
 package me.skatz.utils
 
 import java.io.File
+import java.text.SimpleDateFormat
 import java.util.Calendar
 
 import me.skatz.database.TweeterMessage
@@ -20,6 +21,8 @@ object MessageGenerator {
     for (_ <- 0 to tweetLength) {
       append(tweet, wordsFm.getRandomElement)
     }
-    TweeterMessage(fnameFm.getRandomElement, surnameFm.getRandomElement, tweet.toString.trim, Calendar.getInstance().getTime.toString)
+    TweeterMessage(fnameFm.getRandomElement, surnameFm.getRandomElement, tweet.toString.trim, currentDate)
   }
+
+  def currentDate: String = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZ").format(Calendar.getInstance.getTime)
 }
