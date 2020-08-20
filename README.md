@@ -7,9 +7,10 @@ This repository contains the following components:
 - Elastic Search 
 - Kibana
 - Cassandra
-docker exec cassandra
+
 ![Software Architecture](https://github.com/skatz1990/kafka_playground/blob/master/src/main/resources/diagram/messages_flow.png?raw=true)
 ![Software Architecture](https://github.com/skatz1990/kafka_playground/blob/master/src/main/resources/diagram/logs_flow.png?raw=true)
+
 Future Plans:
 - [x] Add Producer
 - [x] Add Consumer
