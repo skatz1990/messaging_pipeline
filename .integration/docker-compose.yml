@@ -97,7 +97,7 @@ services:
       options:
         syslog-address: "tcp://localhost:5000"
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.0
     container_name: elasticsearch
     environment:
       - xpack.security.enabled=false
@@ -118,7 +118,7 @@ services:
       - 9300:9300
   kibana:
     container_name: kibana
-    image: docker.elastic.co/kibana/kibana:7.4.0
+    image: docker.elastic.co/kibana/kibana:7.9.0
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     ports:
@@ -155,7 +155,7 @@ services:
         syslog-address: "tcp://localhost:5000"
   logstash:
     container_name: logstash
-    image: docker.elastic.co/logstash/logstash:7.8.1
+    image: docker.elastic.co/logstash/logstash:7.9.0
     ports:
       - 5000:5000
       - 5044:5044
