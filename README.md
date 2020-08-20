@@ -2,14 +2,15 @@
 This repository contains the following components:
 
 - Kafka infrastructure (including Zookeeper)
-- Kafka Consumer
-- Kafka Producer
-- Elastic Search 
+- Elasticsearch 
 - Kibana
 - Cassandra
+- Grafana
 
-![Software Architecture](https://github.com/skatz1990/kafka_playground/blob/master/src/main/resources/diagram/messages_flow.png?raw=true)
-![Software Architecture](https://github.com/skatz1990/kafka_playground/blob/master/src/main/resources/diagram/logs_flow.png?raw=true)
+
+<img src="/src/main/resources/diagram/logs_flow.png" width=300 align=right>
+
+<img src="/src/main/resources/diagram/messages_flow.png" width=300 align=right>
 
 Future Plans:
 - [x] Add Producer
