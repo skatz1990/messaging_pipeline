@@ -7,9 +7,9 @@ This repository contains the following components:
 - Cassandra
 - Grafana
 
-<img src="/src/main/resources/diagram/messages_flow.png" width=50%>
+<img src="/src/main/resources/diagram/messages_flow.png" width=75%>
 
-<img src="/src/main/resources/diagram/logs_flow.png" width=50%>
+<img src="/src/main/resources/diagram/logs_flow.png" width=75%>
 
 
 
