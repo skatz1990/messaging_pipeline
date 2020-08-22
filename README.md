@@ -26,11 +26,20 @@ Future Plans:
 - [x] Use Helm Charts
 - [x] Use multiple Kafka topics
 
+
 ## Installation Steps for Docker:
 
 ``` 
 - cd kafka_playground/.integration
 - ./setup-env.sh
+- Run KafkaProducer
+- Run ElasticsearchProc
+- Run CassandraProc
+```
+
+## Installation Steps for Cassandra:
+
+```
 - docker exec -it cassandra cqlsh
 - CREATE KEYSPACE kafka WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};
 - CREATE TABLE kafka.tweets(
@@ -40,7 +49,12 @@ Future Plans:
     lastName text,
     PRIMARY KEY ((firstName, lastName), date)
    );
-- Run KafkaProducer
-- Run ElasticsearchProc
-- Run CassandraProc
 ```
+
+## Installation Steps for Elasticsearch:
+- Add the following indexes:
+```
+- logstash*
+- kafka*
+```
+- For better visualization, use the appropriate timestamp fields
