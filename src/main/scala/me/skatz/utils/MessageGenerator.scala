@@ -7,8 +7,8 @@ import java.util.Calendar
 import me.skatz.database.TweeterMessage
 
 object MessageGenerator {
-  val numOfTweets: Integer = 5
-  val tweetLength: Integer = 100
+  val numOfTweets: Integer = 10
+  val tweetLength: Integer = 70
   val fullDirPath: String  = s"${System.getProperty("user.dir")}${Configuration.filesDir}"
   val fnameFm : FileManager = new FileManager(new File(s"${fullDirPath}/${Configuration.firstNamesFile}"))
   val surnameFm : FileManager = new FileManager(new File(s"${fullDirPath}/${Configuration.lastNamesFile}"))
@@ -24,5 +24,6 @@ object MessageGenerator {
     TweeterMessage(fnameFm.getRandomElement, surnameFm.getRandomElement, tweet.toString.trim, currentDate)
   }
 
+  // One of the supported formats by Elasticsearch
   def currentDate: String = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZ").format(Calendar.getInstance.getTime)
 }
