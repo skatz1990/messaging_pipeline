@@ -20,7 +20,7 @@ Future Plans:
 - [x] Integrate Kibana
 - [x] Add Cassandra
 - [x] Improve Readme with an ifrastructure diagram
-- [ ] Add installation instructions in Readme
+- [x] Add installation instructions in Readme
 - [x] Change Producer to produce a more realistic data, for instance - mouse movement from the user, or keyboard input
 - [ ] Integrate Spark?
 - [x] Use Helm Charts
