@@ -22,9 +22,9 @@ Future Plans:
 - [x] Improve Readme with an ifrastructure diagram
 - [x] Add installation instructions in Readme
 - [x] Change Producer to produce a more realistic data, for instance - mouse movement from the user, or keyboard input
-- [ ] Integrate Spark?
 - [x] Use Helm Charts
 - [x] Use multiple Kafka topics
+- [] Implement metrics
 
 
 ## Installation Steps for Docker:
