@@ -1,4 +1,4 @@
-package me.skatz.utils
+package me.skatz.shared
 
 object Configuration {
 
