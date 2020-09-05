@@ -1,4 +1,4 @@
-package me.skatz.kafka
+package me.skatz.esProc
 
 import akka.actor.ActorSystem
 import akka.event.{Logging, LoggingAdapter}
@@ -8,8 +8,8 @@ import akka.stream.ActorMaterializer
 import akka.stream.alpakka.elasticsearch.WriteMessage
 import akka.stream.alpakka.elasticsearch.scaladsl.ElasticsearchSink
 import akka.stream.scaladsl.Flow
-import me.skatz.database.TweeterMessage
-import me.skatz.utils.{AvroMessageSerializer, Configuration, KafkaUtils}
+import me.skatz.cassandraProc.database.TweeterMessage
+import me.skatz.shared.{AvroMessageSerializer, Configuration, KafkaUtils}
 import org.apache.http.HttpHost
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.serialization.ByteArrayDeserializer
@@ -21,7 +21,7 @@ object ElasticSearchProc extends App with DefaultJsonProtocol {
   implicit val materializer: ActorMaterializer = ActorMaterializer()
   implicit val client: RestClient = RestClient.builder(new HttpHost(Configuration.esUrl, Configuration.esPort.toInt)).build()
   implicit val format: JsonFormat[TweeterMessage] = jsonFormat4(TweeterMessage)
-  implicit val log: LoggingAdapter = Logging.getLogger(ActorSystem.create,this)
+  implicit val log: LoggingAdapter = Logging.getLogger(ActorSystem.create, this)
 
   val consumerSettings = KafkaUtils.configureConsumerSettings(new ByteArrayDeserializer, new ByteArrayDeserializer)
   log.info("ElasticSearchProc started")

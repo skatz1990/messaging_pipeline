@@ -1,6 +1,7 @@
-package me.skatz.utils
+package me.skatz.producer.utils
 
 import java.io.File
+
 import scala.util.Random
 
 class FileManager() {

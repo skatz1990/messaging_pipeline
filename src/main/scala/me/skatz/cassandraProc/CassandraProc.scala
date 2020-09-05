@@ -1,4 +1,4 @@
-package me.skatz.kafka
+package me.skatz.cassandraProc
 
 import akka.actor.ActorSystem
 import akka.event.{Logging, LoggingAdapter}
@@ -7,8 +7,8 @@ import akka.kafka.javadsl.Consumer
 import akka.stream.alpakka.cassandra.scaladsl.CassandraSink
 import akka.stream.scaladsl.Flow
 import com.datastax.driver.core.{BoundStatement, Cluster, PreparedStatement, Session}
-import me.skatz.database.TweeterMessage
-import me.skatz.utils.{AvroMessageSerializer, Configuration, KafkaUtils}
+import me.skatz.cassandraProc.database.TweeterMessage
+import me.skatz.shared.{AvroMessageSerializer, Configuration, KafkaUtils}
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.serialization.ByteArrayDeserializer
 import spray.json.DefaultJsonProtocol
@@ -16,7 +16,7 @@ import spray.json.DefaultJsonProtocol
 object CassandraProc extends App with DefaultJsonProtocol {
   implicit val system: ActorSystem = ActorSystem("CassandraProc")
   implicit val actorSystem: ActorSystem = ActorSystem()
-  implicit val log: LoggingAdapter = Logging.getLogger(ActorSystem.create,this)
+  implicit val log: LoggingAdapter = Logging.getLogger(ActorSystem.create, this)
 
   val consumerSettings = KafkaUtils.configureConsumerSettings(new ByteArrayDeserializer, new ByteArrayDeserializer)
 

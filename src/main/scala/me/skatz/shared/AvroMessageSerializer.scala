@@ -1,10 +1,10 @@
-package me.skatz.utils
+package me.skatz.shared
 
 import java.io.ByteArrayOutputStream
 
 import com.google.gson.Gson
 import com.sksamuel.avro4s.AvroSchema
-import me.skatz.database.TweeterMessage
+import me.skatz.cassandraProc.database.TweeterMessage
 import org.apache.avro.generic.{GenericData, GenericDatumReader, GenericDatumWriter, GenericRecord}
 import org.apache.avro.io.{BinaryEncoder, DecoderFactory, EncoderFactory}
 

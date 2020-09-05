@@ -1,4 +1,4 @@
-package me.skatz.database
+package me.skatz.cassandraProc.database
 
 import java.text.SimpleDateFormat
 import java.util.Date

@@ -1,4 +1,4 @@
-package me.skatz.utils
+package me.skatz.shared
 
 import akka.kafka.{ConsumerSettings, ProducerSettings}
 import com.typesafe.config.{Config, ConfigFactory}
