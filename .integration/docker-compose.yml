@@ -165,6 +165,28 @@ services:
     command: logstash -f /etc/logstash/conf.d/logstash.conf
     volumes:
       - ./logstash/logstash.conf:/etc/logstash/conf.d/logstash.conf:ro
+  metricproc:
+    image: metricproc
+    container_name: metricproc
+    depends_on:
+      - cassandra
+      - kafka
+    links:
+      - kafka
+      - cassandra
+    environment:
+      auto_offset_reset: 'latest'
+      group_id: 'consumer-group'
+      metricproc_source_topic: 'metricproc_source'
+      metricproc_sink_topic: 'metricproc_sink'
+      bootstrap_servers: 'kafka:29092'
+      cassandra_url: cassandra
+      cassandra_port: 7000
+      cassandra_keyspace: kafka
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:5000"
 volumes:
   elasticsearch-data:
     driver: local

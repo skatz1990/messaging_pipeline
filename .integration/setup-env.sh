@@ -37,6 +37,12 @@ runCommand \
 runCommand \
   "Creating enrich_esproc topic" \
   "docker-compose exec kafka kafka-topics --create --topic enrich_esproc --partitions 2 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181"
+runCommand \
+  "Creating metricproc_source topic" \
+  "docker-compose exec kafka kafka-topics --create --topic metricproc_source --partitions 2 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181"
+runCommand \
+  "Creating metricproc_sink topic" \
+  "docker-compose exec kafka kafka-topics --create --topic metricproc_sink --partitions 2 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181"
 
 if [[ "$?" == "1" ]]; then
   echo "Failed to start docker images."
