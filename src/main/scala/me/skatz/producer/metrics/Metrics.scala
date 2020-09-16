@@ -1,7 +1,7 @@
 package me.skatz.producer.metrics
 
-import me.skatz.shared.Metric
+import me.skatz.shared.metrics.Metric
 
 object Metrics {
-  val MessagesSent = new Metric("producer.messages.sent", Metric.SUM)
+  val MessagesSent: Metric = Metric("producer.messages.sent", Metric.SUM)
 }

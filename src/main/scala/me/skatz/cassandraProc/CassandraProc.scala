@@ -32,7 +32,7 @@ object CassandraProc extends App with DefaultJsonProtocol {
   val graph = RunnableGraph.fromGraph(GraphDSL.create() { implicit builder =>
     val source = Consumer.plainSource(consumerSettings, Subscriptions.topics(Configuration.enrichCassTopic))
     val map = Flow[ConsumerRecord[Array[Byte], Array[Byte]]].map { kafkaMessage =>
-      AvroMessageSerializer.genericByteArrayToMessage(kafkaMessage.value).get
+      AvroMessageSerializer.tweeterByteArrayToMessage(kafkaMessage.value).get
     }
     val sink = {
       val statement = session.prepare(s"INSERT INTO ${Configuration.keyspace}.tweets(firstName, lastName, tweet, date) VALUES (?, ?, ?, ?)")
