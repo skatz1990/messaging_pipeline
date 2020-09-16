@@ -30,7 +30,7 @@ object ElasticSearchProc extends App with DefaultJsonProtocol {
   RunnableGraph.fromGraph(GraphDSL.create() { implicit builder =>
     val source = Consumer.plainSource(consumerSettings, Subscriptions.topics(Configuration.enrichEsprocTopic))
     val map = Flow[ConsumerRecord[Array[Byte], Array[Byte]]].map { kafkaMessage =>
-      val msg = AvroMessageSerializer.genericByteArrayToMessage(kafkaMessage.value)
+      val msg = AvroMessageSerializer.tweeterByteArrayToMessage(kafkaMessage.value)
       WriteMessage.createIndexMessage(msg.get)
     }
     val sink = ElasticsearchSink.create[TweeterMessage](indexName = "kafka", typeName = "type name")

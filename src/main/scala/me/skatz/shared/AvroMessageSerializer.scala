@@ -9,7 +9,7 @@ import org.apache.avro.generic.{GenericData, GenericDatumReader, GenericDatumWri
 import org.apache.avro.io.{BinaryEncoder, DecoderFactory, EncoderFactory}
 
 object AvroMessageSerializer {
-  def jsonToGenericByteArray(jsonMsg: String): Array[Byte] = {
+  def jsonToTweeterByteArray(jsonMsg: String): Array[Byte] = {
     val gson = new Gson
 
     // Deserialize JSON
@@ -35,7 +35,7 @@ object AvroMessageSerializer {
     out.toByteArray
   }
 
-  def genericByteArrayToMessage(byteArray: Array[Byte]): Option[TweeterMessage] = {
+  def tweeterByteArrayToMessage(byteArray: Array[Byte]): Option[TweeterMessage] = {
     val schema = AvroSchema[TweeterMessage]
 
     val reader: GenericDatumReader[GenericRecord] = new GenericDatumReader[GenericRecord](schema)

@@ -24,7 +24,7 @@ object EnrichmentProc extends App {
   RunnableGraph.fromGraph(GraphDSL.create() { implicit builder =>
     val source = Consumer.committableSource(consumerSettings, Subscriptions.topics(Configuration.ingestEnrichTopic))
     val map = Flow[ConsumerMessage.CommittableMessage[String, String]].map { msg =>
-      val byteArray = AvroMessageSerializer.jsonToGenericByteArray(msg.record.value())
+      val byteArray = AvroMessageSerializer.jsonToTweeterByteArray(msg.record.value())
       ProducerMessage.multi(
         List[ProducerRecord[String, Array[Byte]]](
           new ProducerRecord[String, Array[Byte]](Configuration.enrichEsprocTopic, byteArray),
