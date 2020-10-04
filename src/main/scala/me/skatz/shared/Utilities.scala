@@ -2,6 +2,8 @@ package me.skatz.shared
 
 import java.io.{ByteArrayOutputStream, ObjectOutputStream}
 import java.nio.charset.StandardCharsets
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
 object Utilities {
   def objToByteArray(obj: Any): Array[Byte] = {
@@ -16,4 +18,8 @@ object Utilities {
     val stream = objToByteArray(obj)
     new String(stream, StandardCharsets.UTF_8)
   }
+
+  def currentDate: String = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZ").format(Calendar.getInstance.getTime)
+
+  def currentDateMs: String = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(Calendar.getInstance.getTime)
 }
