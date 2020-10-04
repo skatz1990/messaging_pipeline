@@ -1,6 +1,6 @@
 package me.skatz.shared.metrics
 
-case class Metric(key: String, value: Metric.Value)
+case class Metric(key: String, aggregator: Metric.Value)
 
 object Metric extends Enumeration {
   type MetricValue = Value
