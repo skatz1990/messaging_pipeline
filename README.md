@@ -33,8 +33,10 @@ Future Plans:
 - cd kafka_playground/.integration
 - ./setup-env.sh
 - Run KafkaProducer
+- Run EnrichmentProc
 - Run ElasticsearchProc
 - Run CassandraProc
+- Run MetricProc
 ```
 
 ## Installation Steps for Cassandra:
