@@ -4,12 +4,14 @@ import akka.actor.ActorSystem
 import akka.event.{Logging, LoggingAdapter}
 import akka.kafka.scaladsl.{Consumer, Producer}
 import akka.kafka.{CommitterSettings, ConsumerMessage, ProducerMessage, Subscriptions}
+import akka.stream.scaladsl.GraphDSL.Implicits._
 import akka.stream.scaladsl.{Flow, GraphDSL, RunnableGraph}
 import akka.stream.{ActorMaterializer, ClosedShape}
+import me.skatz.enrichment.metrics.Metrics
+import me.skatz.shared.metrics.MetricUtils
 import me.skatz.shared.{AvroMessageSerializer, Configuration, KafkaUtils}
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.{ByteArraySerializer, StringDeserializer, StringSerializer}
-import GraphDSL.Implicits._
 
 object EnrichmentProc extends App {
   implicit val system: ActorSystem = ActorSystem("EnrichmentProc")
@@ -22,8 +24,9 @@ object EnrichmentProc extends App {
   log.info("EnrichmentProc started")
 
   RunnableGraph.fromGraph(GraphDSL.create() { implicit builder =>
-    val source = Consumer.committableSource(consumerSettings, Subscriptions.topics(Configuration.ingestEnrichTopic))
-    val map = Flow[ConsumerMessage.CommittableMessage[String, String]].map { msg =>
+    val jointSource = Consumer.committableSource(consumerSettings, Subscriptions.topics(Configuration.ingestEnrichTopic))
+
+    val pipelineMap = Flow[ConsumerMessage.CommittableMessage[String, String]].map { msg =>
       val byteArray = AvroMessageSerializer.jsonToTweeterByteArray(msg.record.value())
       ProducerMessage.multi(
         List[ProducerRecord[String, Array[Byte]]](
@@ -33,9 +36,15 @@ object EnrichmentProc extends App {
         msg.committableOffset
       )
     }
-    val sink = Producer.committableSink(producerSettings, committerSettings)
+    val metricMap = Flow[ConsumerMessage.CommittableMessage[String, String]].map(_ =>
+      MetricUtils.createProducer(Metrics.MessagesSent)
+    )
 
-    source ~> map ~> sink
+    val pipelineSink = Producer.committableSink(producerSettings, committerSettings)
+    val metricSink = MetricUtils.createSink()
+
+    jointSource ~> pipelineMap ~> pipelineSink
+    jointSource ~> metricMap ~> metricSink
     ClosedShape
   }).run()
 }

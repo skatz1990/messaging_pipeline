@@ -49,6 +49,14 @@ Future Plans:
     lastName text,
     PRIMARY KEY ((firstName, lastName), date)
    );
+
+- CREATE TABLE kafka.metrics(
+    key text,
+    aggregator text,
+    date text,
+    value double,
+    PRIMARY KEY (key, date, aggregator)
+    );
 ```
 
 ## Installation Steps for Elasticsearch:
