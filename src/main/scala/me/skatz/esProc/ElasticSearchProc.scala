@@ -16,6 +16,8 @@ import org.apache.kafka.common.serialization.ByteArrayDeserializer
 import org.elasticsearch.client.RestClient
 import spray.json.{DefaultJsonProtocol, JsonFormat}
 import GraphDSL.Implicits._
+import me.skatz.esProc.metrics.Metrics
+import me.skatz.shared.metrics.MetricUtils
 
 object ElasticSearchProc extends App with DefaultJsonProtocol {
   implicit val system: ActorSystem = ActorSystem("ElasticSearchProc")
@@ -28,14 +30,21 @@ object ElasticSearchProc extends App with DefaultJsonProtocol {
   log.info("ElasticSearchProc started")
 
   RunnableGraph.fromGraph(GraphDSL.create() { implicit builder =>
-    val source = Consumer.plainSource(consumerSettings, Subscriptions.topics(Configuration.enrichEsprocTopic))
-    val map = Flow[ConsumerRecord[Array[Byte], Array[Byte]]].map { kafkaMessage =>
+    val jointSource = Consumer.plainSource(consumerSettings, Subscriptions.topics(Configuration.enrichEsprocTopic))
+
+    val pipelineMap = Flow[ConsumerRecord[Array[Byte], Array[Byte]]].map { kafkaMessage =>
       val msg = AvroMessageSerializer.tweeterByteArrayToMessage(kafkaMessage.value)
       WriteMessage.createIndexMessage(msg.get)
     }
-    val sink = ElasticsearchSink.create[TweeterMessage](indexName = "kafka", typeName = "type name")
+    val metricMap = Flow[ConsumerRecord[Array[Byte], Array[Byte]]].map(_ =>
+      MetricUtils.createProducer(Metrics.MessagesSent)
+    )
 
-    source ~> map ~> sink
+    val pipelineSink = ElasticsearchSink.create[TweeterMessage](indexName = "kafka", typeName = "type name")
+    val metricSink = MetricUtils.createSink()
+
+    jointSource ~> pipelineMap ~> pipelineSink
+    jointSource ~> metricMap ~> metricSink
     ClosedShape
   }).run()
 }
