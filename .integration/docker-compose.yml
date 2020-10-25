@@ -153,6 +153,9 @@ services:
       driver: syslog
       options:
         syslog-address: "tcp://localhost:5000"
+    # Install Grafana - Cassandra data source
+    environment:
+      - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=hadesarchitect-cassandra-datasource
   logstash:
     container_name: logstash
     image: docker.elastic.co/logstash/logstash:7.9.0
