@@ -11,6 +11,8 @@ This repository contains the following components:
 
 <img src="/src/main/resources/diagram/logs_flow.png" width=75%>
 
+<img src="/src/main/resources/diagram/metrics_flow.png" width=75%>
+
 
 
 Future Plans:
