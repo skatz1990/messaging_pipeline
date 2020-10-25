@@ -7,7 +7,6 @@
 # For Docker
 docker exec -it cassandra bash
 
-
 cqlsh
 CREATE KEYSPACE kafka WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};
 CREATE TABLE kafka.tweets(
