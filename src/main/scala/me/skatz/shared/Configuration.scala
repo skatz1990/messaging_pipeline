@@ -19,6 +19,10 @@ object Configuration {
   val keyspace: String = sys.env.getOrElse("cassandra_keyspace", "kafka")
   val enrichCassTopic: String = sys.env.getOrElse("enrich_cassproc_topic", "enrich_cassproc")
 
+  // Metric Processor
+  val metricProcSourceTopic: String = sys.env.getOrElse("metricproc_source_topic", "metricproc_source")
+  val metricProcSinkTopic: String = sys.env.getOrElse("metricproc_sink_topic", "metricproc_sink")
+
   // Files Directory
   val filesDir: String = sys.env.getOrElse("files_dir", "/src/main/resources/twitter")
   val firstNamesFile: String = sys.env.getOrElse("fname_file", "firstname.txt")

@@ -1,11 +1,9 @@
 package me.skatz.producer.utils
 
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Calendar
 
 import me.skatz.cassandraProc.database.TweeterMessage
-import me.skatz.shared.Configuration
+import me.skatz.shared.{Configuration, Utilities}
 
 object MessageGenerator {
   val numOfTweets: Integer = 10
@@ -22,9 +20,6 @@ object MessageGenerator {
     for (_ <- 0 to tweetLength) {
       append(tweet, wordsFm.getRandomElement)
     }
-    TweeterMessage(fnameFm.getRandomElement, surnameFm.getRandomElement, tweet.toString.trim, currentDate)
+    TweeterMessage(fnameFm.getRandomElement, surnameFm.getRandomElement, tweet.toString.trim, Utilities.currentDate)
   }
-
-  // One of the supported formats by Elasticsearch
-  def currentDate: String = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZ").format(Calendar.getInstance.getTime)
 }

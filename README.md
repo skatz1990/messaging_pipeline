@@ -11,6 +11,8 @@ This repository contains the following components:
 
 <img src="/src/main/resources/diagram/logs_flow.png" width=75%>
 
+<img src="/src/main/resources/diagram/metrics_flow.png" width=75%>
+
 
 
 Future Plans:
@@ -33,8 +35,10 @@ Future Plans:
 - cd kafka_playground/.integration
 - ./setup-env.sh
 - Run KafkaProducer
+- Run EnrichmentProc
 - Run ElasticsearchProc
 - Run CassandraProc
+- Run MetricProc
 ```
 
 ## Installation Steps for Cassandra:
@@ -49,6 +53,14 @@ Future Plans:
     lastName text,
     PRIMARY KEY ((firstName, lastName), date)
    );
+
+- CREATE TABLE kafka.metrics(
+    key text,
+    aggregator text,
+    date text,
+    value double,
+    PRIMARY KEY (key, date, aggregator)
+    );
 ```
 
 ## Installation Steps for Elasticsearch:
@@ -58,3 +70,16 @@ Future Plans:
 - kafka*
 ```
 - For better visualization, use the appropriate timestamp fields
+
+## Installation Steps for Cassandra:
+- Follow the instructions in `setup-cassandra.sh` file
+
+## Installation Steps for Grafana:
+- Follow the instructions in the `setup-grafana` file
+- Add Elasticsearch as a datasource:
+    - Use elasticsearch:9200 as the URL
+    - Use \*kafka\* as the Index Name
+    - Use version 7.0+
+- Add Cassandra as a datasource:
+    - Use cassandra:9042 as the Host
+    - Use `kafka` as the keyspace

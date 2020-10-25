@@ -1,12 +1,11 @@
 # !/bin/bash
 
 # For Kubernetes:
-POD=$(kubectl get pod -l app=cassandra -o jsonpath="{.items[0].metadata.name}")
-kubectl exec -it $POD bash
+# POD=$(kubectl get pod -l app=cassandra -o jsonpath="{.items[0].metadata.name}")
+# kubectl exec -it $POD bash
 
 # For Docker
 docker exec -it cassandra bash
-
 
 cqlsh
 CREATE KEYSPACE kafka WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};
@@ -17,3 +16,11 @@ CREATE TABLE kafka.tweets(
     lastName text,
     PRIMARY KEY ((firstName, lastName), date)
    );
+
+CREATE TABLE kafka.metrics(
+    key text,
+    aggregator text,
+    date text,
+    value double,
+    PRIMARY KEY ((key, aggregator), date)
+    );
