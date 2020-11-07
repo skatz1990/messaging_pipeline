@@ -1,4 +1,4 @@
-# kafka_playground
+# messaging_pipeline
 This repository contains the following components:
 
 - Kafka infrastructure (including Zookeeper)
@@ -32,7 +32,7 @@ Future Plans:
 ## Installation Steps for Docker:
 
 ``` 
-- cd kafka_playground/.integration
+- cd messaging_pipeline/.integration
 - ./setup-env.sh
 - Run KafkaProducer
 - Run EnrichmentProc
