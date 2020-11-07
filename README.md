@@ -1,5 +1,5 @@
-# messaging_pipeline
-This repository contains the following components:
+# Messaging Pipeline
+Messaging pipelines generates messages and allows the user to visualize them using the following components:
 
 - Kafka infrastructure (including Zookeeper)
 - Elasticsearch 
