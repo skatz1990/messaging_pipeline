@@ -1,9 +1,8 @@
 # Messaging Pipeline
-Messaging pipelines generates messages and allows the user to visualize them using the following components:
+Messaging pipeline generates messages and allows the user to visualize them using the following components:
 
-- Kafka infrastructure (including Zookeeper)
-- Elasticsearch 
-- Kibana
+- Kafka and Zookeeper
+- ELK
 - Cassandra
 - Grafana
 
@@ -21,12 +20,15 @@ Future Plans:
 - [x] Add Elastic Search
 - [x] Integrate Kibana
 - [x] Add Cassandra
-- [x] Improve Readme with an ifrastructure diagram
+- [x] Improve Readme with an infrastructure diagram
 - [x] Add installation instructions in Readme
 - [x] Change Producer to produce a more realistic data, for instance - mouse movement from the user, or keyboard input
 - [x] Use Helm Charts
 - [x] Use multiple Kafka topics
 - [ ] Implement metrics
+- [ ] Unify ELK stack containers into one: https://hub.docker.com/r/sebp/elk/
+- [ ] Add Spark
+- [ ] Automate the entire deployment
 
 
 ## Installation Steps for Docker:
