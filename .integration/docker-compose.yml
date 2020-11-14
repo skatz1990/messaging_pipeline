@@ -4,6 +4,8 @@ services:
     image: confluentinc/cp-zookeeper:latest
     hostname: zookeeper
     container_name: zookeeper
+    depends_on:
+      - logstash
     ports:
       - '2181:2181'
     environment:
@@ -19,6 +21,7 @@ services:
     container_name: kafka
     links:
       - zookeeper
+      - logstash
     ports:
       - '9092:9092'
       - '29092:29092'
@@ -45,6 +48,7 @@ services:
     links:
       - kafka
       - cassandra
+      - logstash
     environment:
       auto_offset_reset: 'latest'
       group_id: 'consumer-group'
@@ -66,6 +70,7 @@ services:
     links:
       - elasticsearch
       - kafka
+      - logstash
     environment:
       offset_reset: 'latest'
       group_id: 'consumer-group'
@@ -86,6 +91,7 @@ services:
     links:
       - kafka
       - zookeeper
+      - logstash
     environment:
       bootstrap_servers: 'kafka:29092'
       filesDir: '/src/main/resources/twitter'
@@ -125,9 +131,12 @@ services:
       - 5601:5601
     depends_on:
       - elasticsearch
+      - logstash
   cassandra:
     container_name: cassandra
     image: cassandra
+    depends_on:
+      - logstash
     environment:
       cassandraUrl: '127.0.0.1'
       cassandraPort: '7000'
@@ -149,6 +158,7 @@ services:
     user: "104"
     depends_on:
       - elasticsearch
+      - logstash
     logging:
       driver: syslog
       options:
@@ -174,6 +184,7 @@ services:
     depends_on:
       - cassandra
       - kafka
+      - logstash
     links:
       - kafka
       - cassandra
