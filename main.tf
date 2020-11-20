@@ -1,5 +1,9 @@
+resource "aws_ecs_cluster" "msg-pipe-ecs-cluster" {
+    name = var.cluster_name
+}
+
 resource "aws_codepipeline" "codepipeline" {
-  name     = "tf-test-pipeline"
+  name     = "messaging-pipeline-cicd"
   role_arn = aws_iam_role.codepipeline_role.arn
 
   artifact_store {
@@ -57,17 +61,23 @@ resource "aws_codepipeline" "codepipeline" {
       name            = "Deploy"
       category        = "Deploy"
       owner           = "AWS"
-      provider        = "CloudFormation"
+      provider        = "ECS"
       input_artifacts = ["build_output"]
       version         = "1"
 
       configuration = {
-        ActionMode     = "REPLACE_ON_FAILURE"
-        Capabilities   = "CAPABILITY_AUTO_EXPAND,CAPABILITY_IAM"
-        OutputFileName = "CreateStackOutput.json"
-        StackName      = "MyStack"
-        TemplatePath   = "build_output::sam-templated.yaml"
+        ClusterName = aws_ecs_cluster.msg-pipe-ecs-cluster.name
+        ServiceName = var.app_service_name
+        FileName    = "imagedefinitions.json"
       }
+
+#      configuration = {
+#        ActionMode     = "REPLACE_ON_FAILURE"
+#        Capabilities   = "CAPABILITY_AUTO_EXPAND,CAPABILITY_IAM"
+#        OutputFileName = "CreateStackOutput.json"
+#        StackName      = "MyStack"
+#        TemplatePath   = "build_output::sam-templated.yaml"
+#      }
     }
   }
 }
@@ -78,7 +88,7 @@ resource "aws_s3_bucket" "codepipeline_bucket" {
 }
 
 resource "aws_iam_role" "codepipeline_role" {
-  name = "test-role"
+  name = "msg-pipeline-role"
 
   assume_role_policy = <<EOF
 {
