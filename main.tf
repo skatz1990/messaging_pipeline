@@ -24,9 +24,9 @@ resource "aws_codepipeline" "codepipeline" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        Owner      = "my-organization"
-        Repo       = "test"
-        Branch     = "master"
+        Owner      = "skatz1990"
+        Repo       = "messaging_pipeline"
+        Branch     = "messaging_pipeline_tf"
         OAuthToken = var.github_token
       }
     }
@@ -73,7 +73,7 @@ resource "aws_codepipeline" "codepipeline" {
 }
 
 resource "aws_s3_bucket" "codepipeline_bucket" {
-  bucket = "test-bucket"
+  bucket = "messaging-pipeline-bucket"
   acl    = "private"
 }
 
@@ -131,5 +131,5 @@ EOF
 }
 
 data "aws_kms_alias" "s3kmskey" {
-  name = "alias/myKmsKey"
+  name = "alias/s3_kms_key"
 }
