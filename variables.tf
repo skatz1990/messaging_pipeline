@@ -12,7 +12,7 @@ variable "aws_access_keys" {
 
 variable "github_token" {
   type = string
-  default = "f4aee9e9bf053b684fde7b2f55a094558fb45b74"
+  default = ""
 }
 
 variable "cluster_name" {
