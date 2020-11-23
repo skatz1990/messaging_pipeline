@@ -87,4 +87,4 @@ Future Plans:
 # Infrastructure deployment using Terraform
 
 ## Diagram
-<img src="/src/main/resources/diagram/msg_pipeline_tf_v6.png" width=75%>
+<img src="/src/main/resources/diagram/msg_pipeline_tf_v6.png" width=100%>
