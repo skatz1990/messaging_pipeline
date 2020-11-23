@@ -1,5 +1,5 @@
 # Creating ECS task, cluster and service. As well as fargate
-resource "aws_ecs_task_definition" "msg-pipe-task" {
+resource "aws_ecs_task_definition" "msg-pipe-ecs-task" {
   family                = "service"
   container_definitions = file("task-definitions/web-service.json")
 
@@ -21,7 +21,7 @@ resource "aws_ecs_cluster" "msg-pipe-ecs-cluster" {
 resource "aws_ecs_service" "msg-pipe-ecs-service" {
   name            = "fargate"
   cluster         = aws_ecs_cluster.msg-pipe-ecs-cluster.id
-  task_definition = aws_ecs_task_definition.msg-pipe-task.arn
+  task_definition = aws_ecs_task_definition.msg-pipe-ecs-task.arn
   desired_count   = 3
 #  iam_role        = aws_iam_role.msg-pipe-ecs-role.arn
 #  depends_on      = [aws_iam_role_policy.foo]

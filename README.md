@@ -86,5 +86,32 @@ Future Plans:
 
 # Infrastructure deployment using Terraform
 
+## How to deploy
+
+### Pre-reqs
+
+- Install git
+- Install awscli
+- Install terraform
+
+### Deploy
+
+1. Clone the repo
+```
+git clone https://github.com/skatz1990/messaging_pipeline.git
+```
+2. Run Terraform code
+```
+terraform init
+```
+```
+terraform plan
+```
+```
+terraform apply -var github_token="*******" -var region="AWS region" -var access_key="*******" -var secret_key="*********" -var cluster_name="cluster name" -var app_service_name="service name"
+```
+```
+Idan Test
+```
 ## Diagram
 <img src="/src/main/resources/diagram/msg_pipeline_tf_v6.png" width=100%>
