@@ -12,7 +12,7 @@ Messaging pipeline generates messages and allows the user to visualize them usin
 
 <img src="/src/main/resources/diagram/metrics_flow.png" width=75%>
 
-
+<img src="/src/main/resources/diagram/msg_pipeline_tf_v6.png" width=75%>
 
 Future Plans:
 - [x] Add Producer
@@ -85,3 +85,8 @@ Future Plans:
 - Add Cassandra as a datasource:
     - Use cassandra:9042 as the Host
     - Use `kafka` as the keyspace
+
+# Infrastructure deployment using Terraform
+
+## Diagram
+<img src="/src/main/resources/diagram/msg_pipeline_tf_v6.png" width=75%>

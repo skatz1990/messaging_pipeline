@@ -1,7 +1,49 @@
+# Creating ECS task, cluster and service. As well as fargate
+resource "aws_ecs_task_definition" "msg-pipe-task" {
+  family                = "service"
+  container_definitions = file("task-definitions/web-service.json")
+
+  volume {
+    name      = "service-storage"
+    host_path = "/ecs/service-storage"
+  }
+
+  placement_constraints {
+    type       = "memberOf"
+    expression = "attribute:ecs.availability-zone in [us-west-2a, us-west-2b]"
+  }
+}
+
 resource "aws_ecs_cluster" "msg-pipe-ecs-cluster" {
     name = var.cluster_name
 }
 
+resource "aws_ecs_service" "msg-pipe-ecs-service" {
+  name            = "fargate"
+  cluster         = aws_ecs_cluster.msg-pipe-ecs-cluster.id
+  task_definition = aws_ecs_task_definition.msg-pipe-task.arn
+  desired_count   = 3
+#  iam_role        = aws_iam_role.msg-pipe-ecs-role.arn
+#  depends_on      = [aws_iam_role_policy.foo]
+
+  ordered_placement_strategy {
+    type  = "binpack"
+    field = "cpu"
+  }
+
+#  load_balancer {
+#    target_group_arn = aws_lb_target_group.foo.arn
+#    container_name   = "mongo"
+#    container_port   = 8080
+#  }
+
+  placement_constraints {
+    type       = "memberOf"
+    expression = "attribute:ecs.availability-zone in [us-west-2a, us-west-2b]"
+  }
+}
+
+# Creating codepipeline steps
 resource "aws_codepipeline" "codepipeline" {
   name     = "messaging-pipeline-cicd"
   role_arn = aws_iam_role.codepipeline_role.arn
@@ -70,23 +112,17 @@ resource "aws_codepipeline" "codepipeline" {
         ServiceName = var.app_service_name
         FileName    = "imagedefinitions.json"
       }
-
-#      configuration = {
-#        ActionMode     = "REPLACE_ON_FAILURE"
-#        Capabilities   = "CAPABILITY_AUTO_EXPAND,CAPABILITY_IAM"
-#        OutputFileName = "CreateStackOutput.json"
-#        StackName      = "MyStack"
-#        TemplatePath   = "build_output::sam-templated.yaml"
-#      }
     }
   }
 }
 
+# Artifacts bucket
 resource "aws_s3_bucket" "codepipeline_bucket" {
   bucket = "messaging-pipeline-bucket"
   acl    = "private"
 }
 
+# IAM roles and policies
 resource "aws_iam_role" "codepipeline_role" {
   name = "msg-pipeline-role"
 
