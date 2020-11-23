@@ -12,8 +12,6 @@ Messaging pipeline generates messages and allows the user to visualize them usin
 
 <img src="/src/main/resources/diagram/metrics_flow.png" width=75%>
 
-<img src="/src/main/resources/diagram/msg_pipeline_tf_v6.png" width=75%>
-
 Future Plans:
 - [x] Add Producer
 - [x] Add Consumer
