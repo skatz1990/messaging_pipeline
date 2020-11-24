@@ -2,9 +2,11 @@
 Messaging pipeline generates messages and allows the user to visualize them using the following components:
 
 - Kafka and Zookeeper
-- ELK
+- ELK stack
 - Cassandra
 - Grafana
+- Jupyter notebooks + Spark
+- Mock S3 
 
 <img src="/src/main/resources/diagram/messages_flow.png" width=75%>
 
