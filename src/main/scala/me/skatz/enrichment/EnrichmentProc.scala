@@ -31,7 +31,8 @@ object EnrichmentProc extends App {
       ProducerMessage.multi(
         List[ProducerRecord[String, Array[Byte]]](
           new ProducerRecord[String, Array[Byte]](Configuration.enrichEsprocTopic, byteArray),
-          new ProducerRecord[String, Array[Byte]](Configuration.enrichCassTopic, byteArray)
+          new ProducerRecord[String, Array[Byte]](Configuration.enrichCassTopic, byteArray),
+          new ProducerRecord[String, Array[Byte]](Configuration.enrichLTTopic, byteArray)
         ),
         msg.committableOffset
       )
