@@ -224,6 +224,17 @@ services:
       driver: syslog
       options:
         syslog-address: "tcp://localhost:5000"
+  jupyter:
+    image: jupyter/pyspark-notebook
+    container_name: jupyter
+    depends_on:
+      - s3
+    ports:
+      - 8888:8888
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:5000"
 volumes:
   elasticsearch-data:
     driver: local
