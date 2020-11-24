@@ -27,7 +27,7 @@ Future Plans:
 - [x] Use multiple Kafka topics
 - [ ] Implement metrics
 - [ ] Unify ELK stack containers into one: https://hub.docker.com/r/sebp/elk/
-- [ ] Add Spark
+- [x] Add Spark
 - [ ] Automate the entire deployment
 
 
@@ -41,28 +41,7 @@ Future Plans:
 - Run ElasticsearchProc
 - Run CassandraProc
 - Run MetricProc
-```
-
-## Installation Steps for Cassandra:
-
-```
-- docker exec -it cassandra cqlsh
-- CREATE KEYSPACE kafka WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};
-- CREATE TABLE kafka.tweets(
-    date text,
-    tweet text,
-    firstName text,
-    lastName text,
-    PRIMARY KEY ((firstName, lastName), date)
-   );
-
-- CREATE TABLE kafka.metrics(
-    key text,
-    aggregator text,
-    date text,
-    value double,
-    PRIMARY KEY (key, date, aggregator)
-    );
+- Run LTProc
 ```
 
 ## Installation Steps for Elasticsearch:
@@ -85,3 +64,20 @@ Future Plans:
 - Add Cassandra as a datasource:
     - Use cassandra:9042 as the Host
     - Use `kafka` as the keyspace
+
+## Installation Steps for Jupyter:
+- Run docker exec -it jupyter jupyter notebook list
+- Copy the token provided to the clipboard to login
+- Check connectivity using a notebook:
+```
+import urllib3
+
+url = "http://s3:9090/messaging"
+http = urllib3.PoolManager()
+response = http.request('GET', url)
+try:
+    data = xmltodict.parse(response.data)
+    print(data)
+except:
+    print("Failed to parse xml from response") 
+```
