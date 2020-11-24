@@ -13,24 +13,6 @@ Messaging pipeline generates messages and allows the user to visualize them usin
 <img src="/src/main/resources/diagram/metrics_flow.png" width=75%>
 
 
-
-Future Plans:
-- [x] Add Producer
-- [x] Add Consumer
-- [x] Add Elastic Search
-- [x] Integrate Kibana
-- [x] Add Cassandra
-- [x] Improve Readme with an infrastructure diagram
-- [x] Add installation instructions in Readme
-- [x] Change Producer to produce a more realistic data, for instance - mouse movement from the user, or keyboard input
-- [x] Use Helm Charts
-- [x] Use multiple Kafka topics
-- [ ] Implement metrics
-- [ ] Unify ELK stack containers into one: https://hub.docker.com/r/sebp/elk/
-- [x] Add Spark
-- [ ] Automate the entire deployment
-
-
 ## Installation Steps for Docker:
 
 ``` 
