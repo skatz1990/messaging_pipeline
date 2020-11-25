@@ -15,16 +15,6 @@ variable "github_token" {
   default = ""
 }
 
-variable "cluster_name" {
-  type = string
-  default = "msg-pipe-ecs-cluster"
-}
-
-variable "app_service_name" {
-  type = string
-  default = "msg-pipe-ecs-service"
-}
-
 #variable "kms_key" {
 #  type = string
 #  default = "s3_kms_key"
