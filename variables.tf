@@ -14,9 +14,3 @@ variable "github_token" {
   type = string
   default = ""
 }
-
-#variable "kms_key" {
-#  type = string
-#  default = "s3_kms_key"
-#  description = "KMS key for codepipeline"
-#{
