@@ -1,3 +1,5 @@
+# Create code pipeline project and link to build step. Work on buildspec.yml
+
 # Creating codepipeline steps
 resource "aws_codepipeline" "codepipeline" {
   name     = "messaging-pipeline-cicd"
