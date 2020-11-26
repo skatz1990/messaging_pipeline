@@ -7,10 +7,10 @@ resource "aws_codepipeline" "codepipeline" {
     location = aws_s3_bucket.codepipeline_bucket.bucket
     type     = "S3"
 
-    encryption_key {
-      id   = data.aws_kms_alias.s3kmskey.arn
-      type = "KMS"
-    }
+#    encryption_key {
+#      id   = data.aws_kms_alias.s3kmskey.arn
+#      type = "KMS"
+#    }
   }
 
   stage {
@@ -28,7 +28,7 @@ resource "aws_codepipeline" "codepipeline" {
         Owner      = "skatz1990"
         Repo       = "messaging_pipeline"
         Branch     = "messaging_pipeline_tf"
-        OAuthToken = var.github_token
+	OAuthToken = var.github_token
       }
     }
   }
@@ -63,8 +63,6 @@ resource "aws_codepipeline" "codepipeline" {
       version         = "1"
 
       configuration = {
-#        ClusterName = aws_ecs_cluster.msg-pipe-ecs-cluster.name
-#        ServiceName = var.app_service_name
         ClusterName = var.cluster_name
         ServiceName = var.service_name
         FileName    = "imagedefinitions.json"
@@ -77,6 +75,14 @@ resource "aws_codepipeline" "codepipeline" {
 resource "aws_s3_bucket" "codepipeline_bucket" {
   bucket = "messaging-pipeline-bucket"
   acl    = "private"
+#  server_side_encryption_configuration {
+#    rule {
+#      apply_server_side_encryption_by_default {
+#        kms_master_key_id = var.kms_key
+#        sse_algorithm     = "aws:kms"
+#      }
+#    }
+#  }
 }
 
 # IAM roles and policies
@@ -113,7 +119,9 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         "s3:GetObject",
         "s3:GetObjectVersion",
         "s3:GetBucketVersioning",
-        "s3:PutObject"
+        "s3:PutObject",
+	"s3:List*",
+	"s3:PutObjectAcl"
       ],
       "Resource": [
         "${aws_s3_bucket.codepipeline_bucket.arn}",
@@ -124,7 +132,10 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
       "Effect": "Allow",
       "Action": [
         "codebuild:BatchGetBuilds",
-        "codebuild:StartBuild"
+        "codebuild:StartBuild",
+        "codecommit:GetBranch",
+        "codecommit:GetCommit",
+	"codecommit:UploadArchive"
       ],
       "Resource": "*"
     }

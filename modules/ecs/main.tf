@@ -48,38 +48,11 @@ EOF
 
 # Creating ECS task, cluster and service. As well as fargate
 resource "aws_ecs_task_definition" "msg-pipe-ecs-task" {
-  family                = "nginx"
-  container_definitions = file("task-definitions/web-service.json")
+  family                = "msg-pipe-services"
+  container_definitions = file("task-definitions/services.json")
 #  requires_compatibilities = ["FARGATE"]
-  cpu = 256
-  memory = 512
-#  volume {
-#    name      = "service-storage"
-#    host_path = "/ecs/service-storage"
-#  }
-#  container_definitions = jsonencode([
-#    {
-#      name : "sample-fargate-app",
-#      image : "httpd:2.4",
-#      cpu : 256,
-#      memory : 512,
-#      essential: true,
-#      mountPoints: [
-#        {
-#          sourceVolume: "service-storage",
-#          containerPath: "/var/scratch"
-#        }
-#      ],
-#      networkMode : "awsvpc",
-#      portMappings : [
-#        {
-#          containerPort : 80,
-#          protocol : "tcp",
-#          hostPort : 80
-#        }
-#      ]
-#    }
-#  ])
+#  cpu = 4096
+#  memory = 8192
 
   placement_constraints {
     type       = "memberOf"
@@ -93,7 +66,7 @@ resource "aws_ecs_cluster" "msg-pipe-ecs-cluster" {
 }
 
 resource "aws_ecs_service" "msg-pipe-ecs-service" {
-  name            = "web-service"
+  name            = "msg-pipe-ecs-service"
   cluster         = aws_ecs_cluster.msg-pipe-ecs-cluster.id
   task_definition = aws_ecs_task_definition.msg-pipe-ecs-task.arn
   desired_count   = 1

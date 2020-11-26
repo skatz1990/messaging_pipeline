@@ -10,6 +10,16 @@ variable "aws_access_keys" {
   }
 }
 
+variable "kms_key" {
+  type = string
+  default = ""
+}
+
+variable "kms_key_arn" {
+  type = string
+  default = ""
+}
+
 variable "github_token" {
   type = string
   default = ""
