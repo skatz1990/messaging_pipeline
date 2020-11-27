@@ -50,14 +50,7 @@ Messaging pipeline generates messages and allows the user to visualize them usin
     - Use `kafka` as the keyspace
 
 ## Installation Steps for Jupyter:
-If bash is your thing:
-- docker exec -it -u root jupyter bash
-- cd $SPARK_HOME/jars/
-- wget https://repo1.maven.org/maven2/com/databricks/spark-xml_2.12/0.10.0/spark-xml_2.12-0.10.0.jar
-- pyspark --packages com.databricks:spark-xml_2.12:0.10.0
-
-
-- Run docker exec -it jupyter jupyter notebook list
+- Run: `docker exec -it jupyter jupyter notebook list`
 - Copy the token provided to the clipboard to login
 
 Sample Python playbook:
