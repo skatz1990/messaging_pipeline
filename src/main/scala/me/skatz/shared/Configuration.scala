@@ -21,7 +21,12 @@ object Configuration {
 
   // Metric Processor
   val metricProcSourceTopic: String = sys.env.getOrElse("metricproc_source_topic", "metricproc_source")
-  val metricProcSinkTopic: String = sys.env.getOrElse("metricproc_sink_topic", "metricproc_sink")
+
+  // Long Time Processor
+  val s3Url: String = sys.env.getOrElse("s3_url", "http://127.0.0.1:9090")
+  val s3Region: String = sys.env.getOrElse("s3_region", "us-west-2")
+  val s3BucketName: String = sys.env.getOrElse("s3_bucket", "messaging")
+  val enrichLTTopic: String = sys.env.getOrElse("enrich_ltproc_topic", "enrich_ltproc")
 
   // Files Directory
   val filesDir: String = sys.env.getOrElse("files_dir", "/src/main/resources/twitter")
