@@ -50,18 +50,34 @@ Messaging pipeline generates messages and allows the user to visualize them usin
     - Use `kafka` as the keyspace
 
 ## Installation Steps for Jupyter:
+If bash is your thing:
+- docker exec -it -u root jupyter bash
+- cd $SPARK_HOME/jars/
+- wget https://repo1.maven.org/maven2/com/databricks/spark-xml_2.12/0.10.0/spark-xml_2.12-0.10.0.jar
+- pyspark --packages com.databricks:spark-xml_2.12:0.10.0
+
+
 - Run docker exec -it jupyter jupyter notebook list
 - Copy the token provided to the clipboard to login
-- Check connectivity using a notebook:
-```
-import urllib3
 
-url = "http://s3:9090/messaging"
-http = urllib3.PoolManager()
-response = http.request('GET', url)
-try:
-    data = xmltodict.parse(response.data)
-    print(data)
-except:
-    print("Failed to parse xml from response") 
+Sample Python playbook:
+```
+from pyspark import SparkContext
+from pyspark import SparkConf
+from re import Match
+
+# Currently not able to get files directly from S3 mock, therefore 
+# this requires downloading the file first
+url = "untitled.txt"
+
+conf = SparkConf()
+sc = SparkContext.getOrCreate(conf=conf)
+text_file = sc.textFile(url)
+
+res = text_file.flatMap(lambda line: line.split(":")) \
+                .filter(lambda w: len(w.split(" ")) == 1) \
+                .map(lambda w: (w, 1)) \
+                .reduceByKey(lambda a, b: a + b)
+
+print(res.collect())
 ```

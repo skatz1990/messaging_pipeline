@@ -1,5 +1,7 @@
 package me.skatz.LTProc
 
+import java.io.{BufferedWriter, File, FileWriter}
+
 import akka.actor.ActorSystem
 import akka.event.{Logging, LoggingAdapter}
 import akka.kafka.Subscriptions
@@ -42,7 +44,13 @@ object LTProc extends App {
 
     val pipelineFlow = Flow[ConsumerRecord[Array[Byte], Array[Byte]]].map { kafkaMessage =>
       val msg = AvroMessageSerializer.tweeterByteArrayToMessage(kafkaMessage.value).get
-      client.putObject(Configuration.s3BucketName, s"${msg.firstName}_${msg.lastName}", msg.tweet)
+      val fileName = "tweets.txt"
+
+      val file = new File(fileName)
+      val bw = new BufferedWriter(new FileWriter(file, true))
+      bw.write(s"${msg.firstName}:${msg.lastName}:${msg.tweet}\r\n")
+      bw.close()
+      client.putObject(Configuration.s3BucketName, fileName, file)
     }
 
     val pipelineSink = Sink.ignore
