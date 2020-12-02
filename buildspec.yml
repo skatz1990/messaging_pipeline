@@ -11,10 +11,10 @@ phases:
       - echo Build completed on `date`
       - mkdir deploy
       - mkdir deploy/lib
-      - cp target/scala-2.13/*.jar deploy/lib
+      - cp target/scala-2.13/messaging_pipeline.jar deploy/lib
     artifacts:
       type: zip
       files:
-        - deploy/lib/lambda-demo-assembly-1.0.jar
+        - deploy/lib/messaging_pipeline-1.0.jar
         - NewSamTemplate.yaml
 
