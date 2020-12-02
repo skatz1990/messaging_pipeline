@@ -12,9 +12,9 @@ phases:
       - mkdir deploy
       - mkdir deploy/lib
       - cp target/scala-2.13/*.jar deploy/lib
-  artifacts:
-    type: zip
-    files:
-      - deploy/lib/lambda-demo-assembly-1.0.jar
-      - NewSamTemplate.yaml
+    artifacts:
+      type: zip
+      files:
+        - deploy/lib/lambda-demo-assembly-1.0.jar
+        - NewSamTemplate.yaml
 
