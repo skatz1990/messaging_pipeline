@@ -1,20 +1,20 @@
 version: 0.1
 phases:
-build:
-  commands:
-    - echo Build started on `date`
-    - echo Run the test and package the code...
-    - sbt compile
-    - sbt assembly
-post_build:
-  commands:
-    - echo Build completed on `date`
-    - mkdir deploy
-    - mkdir deploy/lib
-    - cp target/scala-2.13/*.jar deploy/lib
-artifacts:
-  type: zip
-  files:
-    - deploy/lib/lambda-demo-assembly-1.0.jar
-    - NewSamTemplate.yaml
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Run the test and package the code...
+      - sbt compile
+      - sbt assembly
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - mkdir deploy
+      - mkdir deploy/lib
+      - cp target/scala-2.13/*.jar deploy/lib
+  artifacts:
+    type: zip
+    files:
+      - deploy/lib/lambda-demo-assembly-1.0.jar
+      - NewSamTemplate.yaml
 
