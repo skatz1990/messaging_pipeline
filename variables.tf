@@ -10,6 +10,11 @@ variable "aws_access_keys" {
   }
 }
 
+variable "vpc_id" {
+  type = string
+  default = "vpc-1b75d763"
+}
+
 variable "kms_key" {
   type = string
   default = ""

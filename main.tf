@@ -2,6 +2,11 @@ module "ecs" {
   source = "./modules/ecs" 
 }
 
+#module "eks" {
+#  source = "./modules/eks"
+#  vpc_id = var.vpc_id
+#}
+
 module "codepipeline" {
   source = "./modules/codepipeline"
   cluster_name = module.ecs.cluster_name

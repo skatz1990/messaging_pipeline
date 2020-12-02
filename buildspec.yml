@@ -1,19 +1,20 @@
-version: 0.2
-
+version: 0.1
 phases:
-  install:
-    runtime-versions:
-      java: corretto11
-  pre_build:
-    commands:
-      - echo Nothing to do in the pre_build phase...
-  build:
-    commands:
-      - echo Build started on `date`
-      - mvn install
-  post_build:
-    commands:
-      - echo Build completed on `date`
+build:
+  commands:
+    - echo Build started on `date`
+    - echo Run the test and package the code...
+    - sbt compile
+    - sbt assembly
+post_build:
+  commands:
+    - echo Build completed on `date`
+    - mkdir deploy
+    - mkdir deploy/lib
+    - cp target/scala-2.11/lambda-demo-assembly-1.0.jar deploy/lib
+    - aws cloudformation package --template-file samTemplate.yaml --s3-bucket testbucket-77 --output-template-file NewSamTemplate.yaml
 artifacts:
+  type: zip
   files:
-    - target/messageUtil-1.0.jar
+    - deploy/lib/lambda-demo-assembly-1.0.jar
+    - NewSamTemplate.yaml
