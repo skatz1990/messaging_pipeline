@@ -21,4 +21,10 @@ libraryDependencies ++= Seq(
   "com.lightbend.akka" %% "akka-stream-alpakka-elasticsearch" % alpakkaVersion,
 )
 
-mainClass in assembly := Some("me.skatz.kafka.KafkaProducer")
+assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", xs@_*) => MergeStrategy.discard
+  case PathList("reference.conf") => MergeStrategy.concat
+  case x => MergeStrategy.first
+}
+
+lazy val myProject = (project in file(".")).settings(assemblyJarName in assembly := "messaging_pipeline.jar")
