@@ -72,14 +72,6 @@ phases:
 
 ## How to deploy
 
-### Pre-reqs
-
-- Install git
-- Install awscli
-- Install terraform
-
-### Deploy
-
 1. Clone the repo
 ```
 git clone https://github.com/skatz1990/messaging_pipeline.git
@@ -95,7 +87,7 @@ terraform plan
 terraform apply -var github_token="*******" -var region="AWS region" -var access_key="*******" -var secret_key="*********" -var cluster_name="cluster name" -var app_service_name="service name"
 ```
 
-# What happens during the build process?
+## What happens during the build process?
 
 <img src="/src/main/resources/diagram/messages_flow.png" width=75%>
 
