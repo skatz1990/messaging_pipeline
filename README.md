@@ -16,9 +16,14 @@ First we determied that AWS would be the best cloud platform to host our solutio
     - Codedeploy
  3. ECS
     - ECR
+    - Task definitions
+    - Service
  4. Fargate/EKS/EC2
  5. AWS IAM
+    - IAM policy for codepipeline to communicate with S3
+    - IAM policy for ECS
  6. AWS KMS
+    - Key for S3 encryption at rest
 
 ## Version control and source
 As far as source control we have decided to use Github. AWS will authenticate to Github using a token. After the authentication takes place the code will be copied to S3.
