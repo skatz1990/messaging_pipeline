@@ -89,12 +89,6 @@ terraform apply -var github_token="*******" -var region="AWS region" -var access
 
 ## What happens during the build process?
 
-<img src="/src/main/resources/diagram/messages_flow.png" width=75%>
-
-<img src="/src/main/resources/diagram/logs_flow.png" width=75%>
-
-<img src="/src/main/resources/diagram/metrics_flow.png" width=75%>
-
 See this table to get a better understanding of this deployment:
 
 |          Docker        |                Cassandra                 |         Elasticsearch    |                    Grafana         | 
@@ -106,3 +100,9 @@ See this table to get a better understanding of this deployment:
 | Run CassandraProc      |                                          |                          |  Add Cassandra as a datasource     | 
 | Run MetricProc         |                                          |                          |  Use cassandra:9042 as the Host    |
 | Run MetricProc         |                                          |                          |  Use `kafka` as the keyspace       |
+
+<img src="/src/main/resources/diagram/messages_flow.png" width=75%>
+
+<img src="/src/main/resources/diagram/logs_flow.png" width=75%>
+
+<img src="/src/main/resources/diagram/metrics_flow.png" width=75%>
