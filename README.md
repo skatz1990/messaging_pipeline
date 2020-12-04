@@ -4,8 +4,8 @@
 The messaging pipeline generates messages and allows the user to visualize them using the following components:
 
  1. **Kafka and Zookeeper** - Used for managing the incoming messages.
- 2. **ELK** - We will use the full ELK (Elasticsearch, Logstash and Kibana) stack in order to visualize logs in Kibana.
- 3. **Cassandra** - Will be used as the database.
+ 2. **ELK** - The full ELK (Elasticsearch, Logstash and Kibana) stack will be utilized in order to visualize logs in Kibana.
+ 3. **Cassandra** - The data base for this use case.
  4. **Grafana** - With the Grafana web UI we will be able to visualize metrics.
 
 The idea of the repo is to be able to collect messages. In this case auto generated tweets. Part of this architecture includes a message generator that allows you to explore several scenarios. You can increase or decrease the volume of messages based on your use case. 
