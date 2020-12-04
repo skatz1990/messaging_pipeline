@@ -29,7 +29,7 @@ First we determied that AWS would be the best cloud platform to host our solutio
     - Key for S3 encryption at rest
 
 ## Version control and source
-As far as source control we have decided to use Github. AWS will authenticate to Github using a token. After the authentication takes place the code will be copied to S3. This deployment runs immidietly on commit to the repo. It is possible to change this setting by applying a tag to the commit or administrating the user access to the CI/CD pipeline. To read more about how to customize triggers in AWS codepipeline please refer to this doc: [Adding custom logig to AWS codepipeline](https://aws.amazon.com/blogs/devops/adding-custom-logic-to-aws-codepipeline-with-aws-lambda-and-amazon-cloudwatch-events/)
+As far as source control we have decided to use Github. AWS will authenticate to Github using a token. After the authentication takes place the code will be copied to S3. This deployment runs immidietly on commit to the repo. It is possible to change this setting by applying a tag to the commit or administrating the user access to the CI/CD pipeline. To read more about how to customize triggers in AWS codepipeline please refer to this doc: [Adding custom logic to AWS codepipeline](https://aws.amazon.com/blogs/devops/adding-custom-logic-to-aws-codepipeline-with-aws-lambda-and-amazon-cloudwatch-events/)
 
 ## Buildspec.yml configuration
 The build spec file compiles and produces build artifacts. These artifacts end up in the S3 bucket for this deployment. It the build file will execute pre-build, build and post build actions. An example of a post build action is pushing a docker image to ECR.
