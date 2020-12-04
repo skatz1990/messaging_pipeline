@@ -1,4 +1,4 @@
-[![version](https://img.shields.io/badge/version-0.0.1-green.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-0.0.1-green.svg)](https://semver.org) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Leveraging AWS & Terraform in Messaging pipeline deployment
 The messaging pipeline generates messages and allows the user to visualize them using the following components:
