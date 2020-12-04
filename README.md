@@ -1,7 +1,5 @@
 [![GitHub version](https://badge.fury.io/gh/conventional-changelog%2Fstandard-version.svg)](https://badge.fury.io/gh/conventional-changelog%2Fstandard-version)
 
-test
-
 # Messaging Pipeline
 Messaging pipeline generates messages and allows the user to visualize them using the following components:
 
