@@ -1,6 +1,6 @@
 [![GitHub version](https://badge.fury.io/gh/conventional-changelog%2Fstandard-version.svg)](https://badge.fury.io/gh/conventional-changelog%2Fstandard-version)
 
-# leveraging AWS & Terraform in Messaging pipeline deployment
+# Leveraging AWS & Terraform in Messaging pipeline deployment
 The messaging pipeline generates messages and allows the user to visualize them using the following components:
 
  1. Kafka and Zookeeper
