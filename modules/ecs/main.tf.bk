@@ -50,9 +50,9 @@ EOF
 resource "aws_ecs_task_definition" "msg-pipe-ecs-task" {
   family                = "msg-pipe-services"
   container_definitions = file("task-definitions/services.json")
-#  requires_compatibilities = ["FARGATE", "EC2"]
-#  cpu = 4096
-#  memory = 8192
+#  requires_compatibilities = ["FARGATE"]
+  cpu = 4096
+  memory = 8192
 
   placement_constraints {
     type       = "memberOf"

@@ -63,57 +63,5 @@
         "hostPort": 9092
       }
     ]
-  },
-  {
-    "name": "kafka_proc",
-    "image": "confluentinc/cp-kafka",
-    "cpu": 10,
-    "memory": 512,
-    "essential": true,
-    "portMappings": [
-      {
-        "containerPort": 9083,
-        "hostPort": 9083
-      }
-    ]
-  },
-  {
-    "name": "cassandra_proc",
-    "image": "confluentinc/cp-kafka",
-    "cpu": 10,
-    "memory": 512,
-    "essential": true,
-    "portMappings": [
-      {
-        "containerPort": 9082,
-        "hostPort": 9082
-      }
-    ]
-  },
-  {
-    "name": "elasticsearch_proc",
-    "image": "confluentinc/cp-kafka",
-    "cpu": 10,
-    "memory": 512,
-    "essential": true,
-    "portMappings": [
-      {
-        "containerPort": 9081,
-        "hostPort": 9081
-      }
-    ]
-  },
-  {
-    "name": "enrichment_proc",
-    "image": "confluentinc/cp-kafka",
-    "cpu": 10,
-    "memory": 512,
-    "essential": true,
-    "portMappings": [
-      {
-        "containerPort": 9080,
-        "hostPort": 9080
-      }
-    ]
   }
 ]

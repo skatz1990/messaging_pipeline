@@ -48,7 +48,7 @@ resource "aws_codepipeline" "codepipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = "test"
+        ProjectName = "msg-pipe-project-2"
       }
     }
   }
