@@ -1,12 +1,12 @@
 [![version](https://img.shields.io/badge/version-0.0.1-green.svg)](https://semver.org) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# Leveraging AWS & Terraform in Messaging pipeline deployment
+# Leveraging AWS, Terraform and K8s in Messaging pipeline deployment
 The messaging pipeline generates messages and allows the user to visualize them using the following components:
 
- 1. Kafka and Zookeeper
- 2. ELK
- 3. Cassandra
- 4. Grafana
+ 1. Kafka and Zookeeper - Used for managing the incoming messages.
+ 2. ELK - We will use the full ELK (Elasticsearch, Logstash and Kibana) stack in order to visualize logs in Kibana.
+ 3. Cassandra - Will be used as the database.
+ 4. Grafana - With the Grafana web UI we will be able to visualize metrics.
 
 The idea of the repo is to be able to collect messages. In this case auto generated tweets. Part of this architecture includes a message generator that allows you to explore several scenarios. You can increase or decrease the volume of messages based on your use case. 
 
@@ -40,6 +40,8 @@ First we determied that AWS would be the best cloud platform to host our solutio
     - Task definitions
     - Service
  4. Fargate/EKS/EC2
+    - Kubernetes
+    - Helm
  5. AWS IAM
     - IAM policy for codepipeline to communicate with S3
     - IAM policy for ECS
