@@ -8,13 +8,13 @@ The messaging pipeline generates messages and allows the user to visualize them 
  3. Cassandra
  4. Grafana
 
-## Terraform
+## Why Terraform?
 In every good CI/CD pipeline it is important to use IaC. Automating the infrastructure deployment is crucial for a healthy environemnt. Having an immutable deployment will allow you to focus on architecting a great app rather than patching up and monitoring monolithic solutions. Throuhg Terraform we can deploy all the needed resources while utilizing the module structure. 
 
 View this high level infra diagram in order to have a better understanding of whats to come in this article:
 <img src="/src/main/resources/diagram/msg_pipeline_tf_v6.png" width=100%>
 
-## AWS resources
+## AWS resources we are using
 This deployment started as a local non-saclable POC application. In efforts to automate all things we have decided to use a few cloud native tools.
 First we determied that AWS would be the best cloud platform to host our solution. In this deployment model we are using the following AWS services:
 
