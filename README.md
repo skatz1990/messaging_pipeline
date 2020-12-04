@@ -14,6 +14,10 @@ The main goal is to receive tweets in a JSON format. Then convert the data to Av
 
 With that being said, we must be cost efficient and reliable. Thats where Cloud, CI/CD, serverless and automation come into play. Through out this article you will learn about all the tools we used in order to acheive a reproducible one click deployment of this whole stack.
 
+This diagram is a good representation of the message flow in this app:
+### Messages flow
+<img src="/src/main/resources/diagram/messages_flow_new.png" width=100%>
+
 Hopefully you will find value in the knowledge that we've gained through trial and error.
  
 ## Why Terraform?
@@ -22,7 +26,7 @@ While creating a CI/CD pipeline it is important to use IaC for automation purpos
 View this high level infra diagram in order to have a better understanding of whats to come in this article:
 <img src="/src/main/resources/diagram/msg_pipeline_tf_v6.png" width=100%>
 
-## AWS resources we are using
+## AWS resources
 This deployment started as a local non-saclable POC application. In efforts to automate all things we have decided to use a few cloud native tools.
 First we determied that AWS would be the best cloud platform to host our solution. In this deployment model we are using the following AWS services:
 
@@ -109,9 +113,6 @@ See this table to get a better understanding of this deployment:
 | Run CassandraProc      |                                          |                          |  Add Cassandra as a datasource     | 
 | Run MetricProc         |                                          |                          |  Use cassandra:9042 as the Host    |
 |                        |                                          |                          |  Use `kafka` as the keyspace       |
-
-### Messages flow
-<img src="/src/main/resources/diagram/messages_flow_new.png" width=100%>
 
 <img src="/src/main/resources/diagram/logs_flow.png" width=75%>
 
