@@ -12,7 +12,7 @@ The idea of the repo is to be able to collect messages. In this case auto genera
 
 The main goal is to receive tweets in a JSON format. Then convert the data to Avro (for more about Avro [Click Here](https://avro.apache.org/docs/current/)). The end solution produced by this deployment will allow the user to visualize, analyze and enrich the messages.
 
-With that being said, we must be cost efficient and reliable. Thats where Cloud, CI/CD, serverless and automation come into play. Through out this article you will learn about all the tools we used in order to acheive a one click deployment of this whole stack.
+With that being said, we must be cost efficient and reliable. Thats where Cloud, CI/CD, serverless and automation come into play. Through out this article you will learn about all the tools we used in order to acheive a reproducible one click deployment of this whole stack.
 
 Hopefully you will find value in the knowledge that we've gained through trial and error.
  
