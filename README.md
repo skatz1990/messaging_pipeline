@@ -38,7 +38,8 @@ First we determied that AWS would be the best cloud platform to host our solutio
 As far as source control we have decided to use Github. AWS will authenticate to Github using a token. After the authentication takes place the code will be copied to S3. This deployment runs immidietly on commit to the repo. It is possible to change this setting by applying a tag to the commit or administrating the user access to the CI/CD pipeline. To read more about how to customize triggers in AWS codepipeline please refer to this doc: [Adding custom logic to AWS codepipeline](https://aws.amazon.com/blogs/devops/adding-custom-logic-to-aws-codepipeline-with-aws-lambda-and-amazon-cloudwatch-events/)
 
 ## Buildspec.yml configuration
-The build spec file compiles and produces build artifacts. These artifacts end up in the S3 bucket for this deployment. It the build file will execute pre-build, build and post build actions. An example of a post build action is pushing a docker image to ECR.
+The build spec file compiles and produces build artifacts. These artifacts end up in the S3 bucket for this deployment. The build file will execute pre-build, build and post build actions. As you can see in this yaml file. During the `build` stage a docker image is being created and tagged. The image then is pushed to ECR. This image will later be utilized to created the Proc containers.
+
 ```
 spec.yml
 version: 0.1
