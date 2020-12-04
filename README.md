@@ -9,7 +9,7 @@ The messaging pipeline generates messages and allows the user to visualize them 
  4. Grafana
 
 ## Why Terraform?
-In every good CI/CD pipeline it is important to use IaC. Automating the infrastructure deployment is crucial for a healthy environemnt. Having an immutable deployment will allow you to focus on architecting a great app rather than patching up and monitoring monolithic solutions. Throuhg Terraform we can deploy all the needed resources while utilizing the module structure. 
+In every good CI/CD pipeline it is important to use IaC. Automating the infrastructure deployment is crucial for a healthy environemnt. Having an immutable deployment will allow you to focus on architecting a great app rather than patching up and monitoring monolithic solutions. Through Terraform we can deploy all the needed resources while utilizing the module structure. 
 
 View this high level infra diagram in order to have a better understanding of whats to come in this article:
 <img src="/src/main/resources/diagram/msg_pipeline_tf_v6.png" width=100%>
