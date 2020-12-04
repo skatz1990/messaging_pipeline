@@ -1,6 +1,6 @@
 [![version](https://img.shields.io/badge/version-0.0.1-green.svg)](https://semver.org) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# Leveraging AWS, Terraform and K8s in Messaging pipeline deployment
+# Leveraging AWS, Terraform and K8s to deploy a messaging pipeline
 The messaging pipeline generates messages and allows the user to visualize them using the following components:
 
  1. **Kafka and Zookeeper** - Used for managing the incoming messages.
