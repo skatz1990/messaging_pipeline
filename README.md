@@ -73,11 +73,11 @@ phases:
       - mkdir deploy/lib
       - cp target/scala-2.13/messaging_pipeline.jar deploy/lib
       - docker push aws_account_id.dkr.ecr.region.amazonaws.com/my-web-app
-      - java -classpath messaging_pipeline.jar me.skatz.producer.KafkaProducer
-      - java -classpath messaging_pipeline.jar me.skatz.LTProc.LTProc
-      - java -classpath messaging_pipeline.jar me.skatz.esProc.ElasticSearchProc
-      - java -classpath messaging_pipeline.jar me.skatz.enrichment.EnrichmentProc
-      - java -classpath messaging_pipeline.jar me.skatz.cassandraProc.CassandraProc
+      - java -classpath messaging_pipeline.jar me.messaging.producer.KafkaProducer
+      - java -classpath messaging_pipeline.jar me.messaging.LTProc.LTProc
+      - java -classpath messaging_pipeline.jar me.messaging.esProc.ElasticSearchProc
+      - java -classpath messaging_pipeline.jar me.messaging.enrichment.EnrichmentProc
+      - java -classpath messaging_pipeline.jar me.messaging.cassandraProc.CassandraProc
     artifacts:
       type: zip
       files:
@@ -116,11 +116,11 @@ See this table to get a better understanding of this deployment:
 | Run MetricProc         |                                          |                          |  Use cassandra:9042 as the Host    |                                                       |
 |                        |                                          |                          |  Use `kafka` as the keyspace       |                                                       |
 
+<img src="/src/main/resources/diagram/messages_flow.png" width=75%>
+
+<img src="/src/main/resources/diagram/metrics_flow.png" width=75%>
+
 <img src="/src/main/resources/diagram/logs_flow.png" width=75%>
-
-<img src="/src/main/resources/diagram/metrics_flow.png" width=75%>
-
-<img src="/src/main/resources/diagram/metrics_flow.png" width=75%>
 
 
 ## Installation Steps for Jupyter:
