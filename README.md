@@ -102,7 +102,7 @@ See this table to get a better understanding of this deployment:
 | Run MetricProc         |                                          |                          |  Use `kafka` as the keyspace       |
 
 ### Messages flow
-<img src="/src/main/resources/diagram/messages_flow_new.png" width=75%>
+<img src="/src/main/resources/diagram/messages_flow_new.png" width=100%>
 
 <img src="/src/main/resources/diagram/logs_flow.png" width=75%>
 
