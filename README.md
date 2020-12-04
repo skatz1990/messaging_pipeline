@@ -99,7 +99,7 @@ See this table to get a better understanding of this deployment:
 | Run ElasticsearchProc  | CREATE TABLE kafka.metrics               |                          |  Use version 7.0+                  |
 | Run CassandraProc      |                                          |                          |  Add Cassandra as a datasource     | 
 | Run MetricProc         |                                          |                          |  Use cassandra:9042 as the Host    |
-| Run MetricProc         |                                          |                          |  Use `kafka` as the keyspace       |
+|                        |                                          |                          |  Use `kafka` as the keyspace       |
 
 ### Messages flow
 <img src="/src/main/resources/diagram/messages_flow_new.png" width=100%>
