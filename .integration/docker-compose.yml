@@ -192,11 +192,45 @@ services:
       auto_offset_reset: 'latest'
       group_id: 'consumer-group'
       metricproc_source_topic: 'metricproc_source'
-      metricproc_sink_topic: 'metricproc_sink'
       bootstrap_servers: 'kafka:29092'
       cassandra_url: cassandra
       cassandra_port: 7000
       cassandra_keyspace: kafka
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:5000"
+  ltProc:
+    image: ltProc
+    container_name: ltProc
+    environment:
+      s3_url: 'http://127.0.0.1:9090'
+      s3_region: 'us-west-2'
+      s3_bucket: 'messaging'
+      enrich_ltproc_topic: 'enrich_ltproc'
+    depends_on:
+      - logstash
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:5000"
+  s3:
+    image: adobe/s3mock
+    container_name: s3
+    ports:
+      - 9090:9090
+      - 9191:9191
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:5000"
+  jupyter:
+    image: jupyter/pyspark-notebook
+    container_name: jupyter
+    depends_on:
+      - s3
+    ports:
+      - 8888:8888
     logging:
       driver: syslog
       options:

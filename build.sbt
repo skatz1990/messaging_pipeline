@@ -19,6 +19,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-stream-kafka" % "2.0.2",
   "com.lightbend.akka" %% "akka-stream-alpakka-cassandra" % alpakkaVersion,
   "com.lightbend.akka" %% "akka-stream-alpakka-elasticsearch" % alpakkaVersion,
+  "com.amazonaws" % "aws-java-sdk" % "1.11.906"
 )
 
 assemblyMergeStrategy in assembly := {
