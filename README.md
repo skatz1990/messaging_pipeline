@@ -95,7 +95,7 @@ See this table to get a better understanding of this deployment:
 |          :---:         |                  :---:                   |              :---:       |                     :---:          |
 | Copy integration dir   | docker exec -it cassandra cqlsh          |     Add index: logstash* |  Add Elasticsearch as a datasource |
 | Run KafkaProducer      | CREATE KEYSPACE kafka WITH REPLICATION   |     Add index: kafka*    |  Use elasticsearch:9200 as the URL |
-| Run EnrichmentProc     | REATE TABLE kafka.tweets                 |                          |  Use \*kafka\* as the Index Name   |
+| Run EnrichmentProc     | CREATE TABLE kafka.tweets                |                          |  Use \*kafka\* as the Index Name   |
 | Run ElasticsearchProc  | CREATE TABLE kafka.metrics               |                          |  Use version 7.0+                  |
 | Run CassandraProc      |                                          |                          |  Add Cassandra as a datasource     | 
 | Run MetricProc         |                                          |                          |  Use cassandra:9042 as the Host    |
