@@ -16,6 +16,60 @@ Messaging pipeline generates messages and allows the user to visualize them usin
 
 # Infrastructure deployment using Terraform
 
+## Terraform
+In every good CI/CD pipeline it is important to use IaC. Automating the infrastructure deployment is crucial for a healthy environemnt. Having an immutable deployment will allow you to focus on architecting a great app rather then patching up and monitoring monolithic solutions. Throuhg Terraform we can deploy all the needed resources while utilizing the module structure. 
+
+## AWS resources
+This deployment started as a local non-saclable POC application. In efforts to automate all things we have decided to use a few cloud native tools.
+First we determied that AWS would be the best cloud platform to host our solution. In this deployment model we are using the following AWS services:
+
+ 1. S3
+ 2. AWS Codepipeline
+    - Codebuild
+    - Codebuild project
+    - Codedeploy
+ 3. ECS
+    - ECR
+ 4. Fargate/EKS/EC2
+ 5. AWS IAM
+ 6. AWS KMS
+
+## Version control and source
+As far as source control we have decided to use Github. AWS will authenticate to Github using a token. After the authentication takes place the code will be copied to S3.
+
+## Buildspec.yml configuration
+The build spec file compiles and produces build artifacts. These artifacts end up in the S3 bucket for htis deployment.
+```
+spec.yml
+version: 0.1
+phases:
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Run the test and package the code...
+      - sbt compile
+      - sbt assembly
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - mkdir deploy
+      - mkdir deploy/lib
+      - cp target/scala-2.13/messaging_pipeline.jar deploy/lib
+      - docker push aws_account_id.dkr.ecr.region.amazonaws.com/my-web-app
+      - java -classpath messaging_pipeline.jar me.skatz.producer.KafkaProducer
+      - java -classpath messaging_pipeline.jar me.skatz.LTProc.LTProc
+      - java -classpath messaging_pipeline.jar me.skatz.esProc.ElasticSearchProc
+      - java -classpath messaging_pipeline.jar me.skatz.enrichment.EnrichmentProc
+      - java -classpath messaging_pipeline.jar me.skatz.cassandraProc.CassandraProc
+    artifacts:
+      type: zip
+      files:
+        - deploy/lib/messaging_pipeline-1.0.jar
+        - NewSamTemplate.yaml
+```
+
 ## How to deploy
 
 ### Pre-reqs
@@ -43,7 +97,9 @@ terraform apply -var github_token="*******" -var region="AWS region" -var access
 ## Diagram
 <img src="/src/main/resources/diagram/msg_pipeline_tf_v6.png" width=100%>
 
-## Installation Steps for main components:
+## What happens during the build process? 
+
+See this table to get a better understanding of this deployment:
 
 |          Docker        |                Cassandra                 |         Elasticsearch    |                    Grafana         | 
 |          :---:         |                  :---:                   |              :---:       |                     :---:          |
