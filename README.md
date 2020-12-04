@@ -1,7 +1,13 @@
 [![GitHub version](https://badge.fury.io/gh/conventional-changelog%2Fstandard-version.svg)](https://badge.fury.io/gh/conventional-changelog%2Fstandard-version)
 
-# Infrastructure deployment using Terraform
+# Messaging pipeline deployment, leveraging AWS & Terraform
+The messaging pipeline generates messages and allows the user to visualize them using the following components:
 
+ 1. Kafka and Zookeeper
+ 2. ELK
+ 3. Cassandra
+ 4. Grafana
+ 
 ## Terraform
 In every good CI/CD pipeline it is important to use IaC. Automating the infrastructure deployment is crucial for a healthy environemnt. Having an immutable deployment will allow you to focus on architecting a great app rather than patching up and monitoring monolithic solutions. Throuhg Terraform we can deploy all the needed resources while utilizing the module structure. 
 
@@ -89,13 +95,7 @@ terraform plan
 terraform apply -var github_token="*******" -var region="AWS region" -var access_key="*******" -var secret_key="*********" -var cluster_name="cluster name" -var app_service_name="service name"
 ```
 
-# What happens during the build process? 
-The messaging pipeline generates messages and allows the user to visualize them using the following components:
-
-- Kafka and Zookeeper
-- ELK
-- Cassandra
-- Grafana
+# What happens during the build process?
 
 <img src="/src/main/resources/diagram/messages_flow.png" width=75%>
 
