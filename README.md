@@ -17,7 +17,7 @@ Messaging pipeline generates messages and allows the user to visualize them usin
 # Infrastructure deployment using Terraform
 
 ## Terraform
-In every good CI/CD pipeline it is important to use IaC. Automating the infrastructure deployment is crucial for a healthy environemnt. Having an immutable deployment will allow you to focus on architecting a great app rather then patching up and monitoring monolithic solutions. Throuhg Terraform we can deploy all the needed resources while utilizing the module structure. 
+In every good CI/CD pipeline it is important to use IaC. Automating the infrastructure deployment is crucial for a healthy environemnt. Having an immutable deployment will allow you to focus on architecting a great app rather than patching up and monitoring monolithic solutions. Throuhg Terraform we can deploy all the needed resources while utilizing the module structure. 
 
 ## AWS resources
 This deployment started as a local non-saclable POC application. In efforts to automate all things we have decided to use a few cloud native tools.
