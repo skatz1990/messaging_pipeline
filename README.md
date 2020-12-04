@@ -1,5 +1,9 @@
 [![version](https://img.shields.io/badge/version-1.0.1-yellow.svg)](https://semver.org)
 
+[![GitHub version](https://badge.fury.io/gh/conventional-changelog%2Fstandard-version.svg)](https://badge.fury.io/gh/conventional-changelog%2Fstandard-version)
+
+test
+
 # Messaging Pipeline
 Messaging pipeline generates messages and allows the user to visualize them using the following components:
 
