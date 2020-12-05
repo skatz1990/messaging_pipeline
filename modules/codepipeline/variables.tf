@@ -67,6 +67,11 @@ variable "msg_pipe_subnet_2_arn" {
   default = ""
 }
 
+variable "delete_bucket" {
+  type = string
+  default = "false"
+}
+
 variable "vpc_id" {}
 
 variable "msg_pipe_sg_1" {}

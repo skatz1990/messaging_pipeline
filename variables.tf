@@ -10,11 +10,6 @@ variable "aws_access_keys" {
   }
 }
 
-variable "vpc_id" {
-  type = string
-  default = "vpc-1b75d763"
-}
-
 variable "kms_key" {
   type = string
   default = ""
@@ -52,4 +47,9 @@ variable "az_number" {
     e = 5
     f = 6
   }
+}
+
+variable "delete_bucket" {
+  type = string
+  default = ""
 }

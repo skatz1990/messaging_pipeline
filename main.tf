@@ -106,6 +106,7 @@ module "codepipeline" {
   msg_pipe_subnet_2 = aws_subnet.msg_pipe_subnet_2.id
   msg_pipe_sg_1 = aws_security_group.msg_pipe_sg_1.id
   msg_pipe_sg_2 = aws_security_group.msg_pipe_sg_2.id
+  delete_bucket = "false"
 #  msg_pipe_subnet_1_arn = aws_subnet.msg_pipe_subnet_1.arn
 #  msg_pipe_subnet_2_arn =  aws_subnet.msg_pipe_subnet_2.arn
 }

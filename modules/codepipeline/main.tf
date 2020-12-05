@@ -2,6 +2,7 @@
 resource "aws_s3_bucket" "codepipeline_bucket" {
   bucket = "messaging-pipeline-bucket"
   acl    = "private"
+  force_destroy = var.delete_bucket
 #  server_side_encryption_configuration {
 #    rule {
 #      apply_server_side_encryption_by_default {
@@ -171,9 +172,9 @@ resource "aws_codebuild_project" "msg_pipe_build_project" {
   }
 }
 
-resource "aws_codebuild_project" "project-with-cache" {
-  name           = "test-project-cache"
-  description    = "test_codebuild_project_cache"
+resource "aws_codebuild_project" "msg_pipe_project_cache" {
+  name           = "msg_pipe_project_cache"
+  description    = "msg_pipe_codebuild_project_cache"
   build_timeout  = "5"
   queued_timeout = "5"
 
