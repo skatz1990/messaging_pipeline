@@ -46,3 +46,29 @@ variable "kms_deletion_window_in_days" {
   type = string
   default = 7
 }
+
+variable "msg_pipe_subnet_1" {
+  type = string
+  default = ""
+}
+
+variable "msg_pipe_subnet_2" {
+  type = string
+  default = ""
+}
+
+variable "msg_pipe_subnet_1_arn" {
+  type = string
+  default = ""
+}
+
+variable "msg_pipe_subnet_2_arn" {
+  type = string
+  default = ""
+}
+
+variable "vpc_id" {}
+
+variable "msg_pipe_sg_1" {}
+
+variable "msg_pipe_sg_2" {}
