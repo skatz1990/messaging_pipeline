@@ -172,46 +172,6 @@ resource "aws_codebuild_project" "msg_pipe_build_project" {
   }
 }
 
-resource "aws_codebuild_project" "msg_pipe_project_cache" {
-  name           = "msg_pipe_project_cache"
-  description    = "msg_pipe_codebuild_project_cache"
-  build_timeout  = "5"
-  queued_timeout = "5"
-
-  service_role = aws_iam_role.msg_pipe_project_role.arn
-
-  artifacts {
-    type = "NO_ARTIFACTS"
-  }
-
-  cache {
-    type  = "LOCAL"
-    modes = ["LOCAL_DOCKER_LAYER_CACHE", "LOCAL_SOURCE_CACHE"]
-  }
-
-  environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/standard:1.0"
-    type                        = "LINUX_CONTAINER"
-    image_pull_credentials_type = "CODEBUILD"
-
-    environment_variable {
-      name  = "SOME_KEY1"
-      value = "SOME_VALUE1"
-    }
-  }
-
-  source {
-    type            = "GITHUB"
-    location        = "https://github.com/mitchellh/packer.git"
-    git_clone_depth = 1
-  }
-
-  tags = {
-    Environment = "Test"
-  }
-}
-
 # Creating codepipeline steps
 resource "aws_codepipeline" "codepipeline" {
   name     = "messaging-pipeline-cicd"
@@ -260,7 +220,7 @@ resource "aws_codepipeline" "codepipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName = "msg-pipe-project-2"
+        ProjectName = aws_codebuild_project.msg_pipe_build_project.name
       }
     }
   }
