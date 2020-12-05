@@ -1,4 +1,11 @@
 .idea
 target
 
+*.tfstate
+*.tfstate.backup
+.terraform
+*.terraform
+
+1
+
 .DS_Store

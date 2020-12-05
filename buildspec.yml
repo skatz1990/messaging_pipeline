@@ -1,0 +1,27 @@
+version: 0.1
+phases:
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Run the test and package the code...
+      - sbt compile
+      - sbt assembly
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG      
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - mkdir deploy
+      - mkdir deploy/lib
+      - cp target/scala-2.13/messaging_pipeline.jar deploy/lib
+      - docker push aws_account_id.dkr.ecr.region.amazonaws.com/my-web-app
+      - java -classpath messaging_pipeline.jar me.messaging.producer.KafkaProducer
+      - java -classpath messaging_pipeline.jar me.messaging.LTProc.LTProc
+      - java -classpath messaging_pipeline.jar me.messaging.esProc.ElasticSearchProc
+      - java -classpath messaging_pipeline.jar me.messaging.enrichment.EnrichmentProc
+      - java -classpath messaging_pipeline.jar me.messaging.cassandraProc.CassandraProc
+    artifacts:
+      type: zip
+      files:
+        - deploy/lib/messaging_pipeline-1.0.jar
+        - NewSamTemplate.yaml

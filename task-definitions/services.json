@@ -1,0 +1,119 @@
+[
+  {
+    "name": "zookeeper",
+    "image": "confluentinc/cp-zookeeper",
+    "cpu": 10,
+    "memory": 512,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 2181,
+        "hostPort": 2181
+      }
+    ]
+  },
+  {
+    "name": "kibana",
+    "image": "docker.elastic.co/kibana/kibana",
+    "cpu": 10,
+    "memory": 256,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 5601,
+        "hostPort": 5601
+      }
+    ]
+  },
+  {
+    "name": "elasticsearch",
+    "image": "docker.elastic.co/elasticsearch/elasticsearch",
+    "cpu": 10,
+    "memory": 512,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 9200,
+        "hostPort": 9200
+      }
+    ]
+  },
+  {
+    "name": "cassandra",
+    "image": "cassandra",
+    "cpu": 10,
+    "memory": 512,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 7000,
+        "hostPort": 7000
+      }
+    ]
+  },
+  {
+    "name": "kafka",
+    "image": "confluentinc/cp-kafka",
+    "cpu": 10,
+    "memory": 512,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 9092,
+        "hostPort": 9092
+      }
+    ]
+  },
+  {
+    "name": "kafka_proc",
+    "image": "confluentinc/cp-kafka",
+    "cpu": 10,
+    "memory": 512,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 9083,
+        "hostPort": 9083
+      }
+    ]
+  },
+  {
+    "name": "cassandra_proc",
+    "image": "confluentinc/cp-kafka",
+    "cpu": 10,
+    "memory": 512,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 9082,
+        "hostPort": 9082
+      }
+    ]
+  },
+  {
+    "name": "elasticsearch_proc",
+    "image": "confluentinc/cp-kafka",
+    "cpu": 10,
+    "memory": 512,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 9081,
+        "hostPort": 9081
+      }
+    ]
+  },
+  {
+    "name": "enrichment_proc",
+    "image": "confluentinc/cp-kafka",
+    "cpu": 10,
+    "memory": 512,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 9080,
+        "hostPort": 9080
+      }
+    ]
+  }
+]
