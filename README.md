@@ -116,7 +116,7 @@ See this table to get a better understanding of this deployment:
 | Run MetricProc         |                                          |                          |  Use cassandra:9042 as the Host    |                                                       |
 |                        |                                          |                          |  Use `kafka` as the keyspace       |                                                       |
 
-<img src="/src/main/resources/diagram/messages_flow.png" width=75%>
+#<img src="/src/main/resources/diagram/messages_flow.png" width=75%>
 
 <img src="/src/main/resources/diagram/metrics_flow.png" width=75%>
 
