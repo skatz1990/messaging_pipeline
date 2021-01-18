@@ -1,6 +1,6 @@
 # Artifacts bucket
 resource "aws_s3_bucket" "codepipeline_bucket" {
-  bucket = "messaging-pipeline-bucket"
+  bucket = "messaging-pipeline-bucket-2"
   acl    = "private"
   force_destroy = var.delete_bucket
 #  server_side_encryption_configuration {
@@ -151,7 +151,7 @@ resource "aws_codebuild_project" "msg_pipe_build_project" {
     }
   }
 
-  source_version = "master"
+  source_version = "main"
 
   vpc_config {
     vpc_id = var.vpc_id
@@ -201,7 +201,7 @@ resource "aws_codepipeline" "codepipeline" {
       configuration = {
         Owner      = "Autometa-Labs"
         Repo       = "messaging_pipeline"
-        Branch     = "master"
+        Branch     = "main"
 	OAuthToken = var.github_token
       }
     }
