@@ -33,5 +33,5 @@ module "codepipeline" {
   msg_pipe_subnet_2   =   module.vpc.msg_pipe_subnet_2
   msg_pipe_sg_1       =   module.vpc.msg_pipe_sg_1
   msg_pipe_sg_2       =   module.vpc.msg_pipe_sg_2
-  delete_bucket       =   "false"
+  delete_bucket       =   "true"
 }

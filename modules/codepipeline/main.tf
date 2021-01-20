@@ -32,7 +32,60 @@ resource "aws_iam_role" "msg_pipe_project_role" {
 EOF
 }
 
+
+
+resource "aws_iam_role_policy" "msg_pipe_project_policy_new" {
+  name = "msg_pipe_project_policy_new"
+  role = aws_iam_role.msg_pipe_project_role.name
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:logs:us-west-2:056275324425:log-group:/aws/codebuild/${aws_codebuild_project.msg_pipe_build_project.name}",
+                "arn:aws:logs:us-west-2:056275324425:log-group:/aws/codebuild/${aws_codebuild_project.msg_pipe_build_project.name}:*"
+            ],
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::codepipeline-us-west-2-*"
+            ],
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:GetObjectVersion",
+                "s3:GetBucketAcl",
+                "s3:GetBucketLocation"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+            ],
+            "Resource": [
+                "arn:aws:codebuild:us-west-2:056275324425:report-group/${aws_codebuild_project.msg_pipe_build_project.name}-*"
+            ]
+        }
+    ]
+}
+POLICY
+}
+
 resource "aws_iam_role_policy" "msg_pipe_project_policy" {
+  name = "msg_pipe_project_policy"
   role = aws_iam_role.msg_pipe_project_role.name
 
   policy = <<POLICY
@@ -69,13 +122,13 @@ resource "aws_iam_role_policy" "msg_pipe_project_policy" {
         "ec2:CreateNetworkInterfacePermission"
       ],
       "Resource": [
-        "arn:aws:ec2:us-east-1:123456789012:network-interface/*"
+        "arn:aws:ec2:us-west-2:056275324425:network-interface/*"
       ],
       "Condition": {
         "StringEquals": {
           "ec2:Subnet": [
-            "${var.msg_pipe_subnet_1}",
-            "${var.msg_pipe_subnet_2}"
+            "arn:aws:ec2:us-west-2:056275324425:subnet/${var.msg_pipe_subnet_1}",
+            "arn:aws:ec2:us-west-2:056275324425:subnet/${var.msg_pipe_subnet_2}"
           ],
           "ec2:AuthorizedService": "codebuild.amazonaws.com"
         }
@@ -113,9 +166,10 @@ resource "aws_codebuild_project" "msg_pipe_build_project" {
 
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/standard:1.0"
+    image                       = "aws/codebuild/standard:4.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
+    privileged_mode             = true
 
     environment_variable {
       name  = "SOME_KEY1"
@@ -143,7 +197,8 @@ resource "aws_codebuild_project" "msg_pipe_build_project" {
 
   source {
     type            = "GITHUB"
-    location        = "https://github.com/mitchellh/packer.git"
+    location        = "https://github.com/idanbenyair/messaging_pipeline.git"
+#    location        = "https://github.com/mitchellh/packer.git"
     git_clone_depth = 1
 
     git_submodules_config {
@@ -151,7 +206,7 @@ resource "aws_codebuild_project" "msg_pipe_build_project" {
     }
   }
 
-  source_version = "master"
+  source_version = "main"
 
   vpc_config {
     vpc_id = var.vpc_id
@@ -199,10 +254,10 @@ resource "aws_codepipeline" "codepipeline" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        Owner      = "Autometa-Labs"
+        Owner      = "idanbenyair"
         Repo       = "messaging_pipeline"
-        Branch     = "master"
-	OAuthToken = var.github_token
+        Branch     = "main"
+	      OAuthToken = var.github_token
       }
     }
   }
